@@ -9,7 +9,7 @@ tests/testthat/*.pdf
 .RData
 .RDataTmp
 
-# User-specific files
+# User-specific  files
 .Ruserdata
 
 # Example code in package build process
@@ -50,4 +50,4 @@ rsconnect/
 .Rproj.user
 /doc/
 /Meta/
-docs
+
