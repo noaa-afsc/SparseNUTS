@@ -21,14 +21,14 @@ if(!skip_TMB){
 
   obj <- get_simple_obj()
 
-  #
+
   # # dummy model for testing
   # pars <- list(x1=0,x2=0,x3=0)
   # f <- function(pars) {sum(-dnorm(c(pars$x1,pars$x2,pars$x3),0, 1,log=TRUE))}
   # f(pars)
   # obj <- RTMB::MakeADFun(func = f, parameters=pars, random=c('x2', 'x3'))
-  # fit <- sample_snuts(obj, iter=200, warmup=100, chains=1)
+  # fit <- sample_snuts(obj, num_samples=300, num_warmup=100, chains=2, cores=1)
   # pairs(fit)
-
+  # saveRDS(object=fit, file='tests/testthat/fit_snuts.RDS')
 }
 

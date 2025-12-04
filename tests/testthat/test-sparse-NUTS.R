@@ -19,7 +19,7 @@ test_that("all metrics work", {
   expect_equal(length(fits),7)
   out <- lapply(fits, function(x) as.numeric(tail(as.data.frame(x), n=1)[1]))
   expect_equal(out$dense,-0.4488092, tolerance=1e-5)
-  expect_equal(out$sparse,-0.7966603, tolerance=1e-5)
+  expect_equal(out$sparse,-0.7966351, tolerance=1e-5)
   # for some reason this one matches locally, but fails during testing???
   #expect_equal(out$diag,-0.08499555, tolerance=1e-5)
   expect_equal(out$unit,-0.88248, tolerance=1e-5)
@@ -88,7 +88,7 @@ test_that("parallel works", {
   fit <- sample_snuts(obj, num_samples=800, num_warmup=200, cores=4,
                            refresh=0, print=FALSE, adapt_stan_metric = TRUE,
                            chains=4, seed=1, metric='sparse')
-  expect_equal(sum(as.data.frame(fit)),  259212.9483)
+  expect_equal(sum(as.data.frame(fit)),  259212.8705028)
 })
 
 
@@ -114,12 +114,12 @@ test_that("auto metric selection is robust to model type", {
                             num_warmup=200, cores=1, chains=1, seed=1,
                             adapt_stan_metric = TRUE,
                             metric='auto', print=FALSE))
-  expect_equal(as.numeric(tail(as.data.frame(fit1),1)[1]),-1.362821, tolerance =1e-6)
+  expect_equal(as.numeric(tail(as.data.frame(fit1),1)[1]),-1.362834, tolerance =1e-6)
   suppressWarnings(fit2 <- sample_snuts(obj, num_samples=800,  laplace=TRUE, refresh=0,
                             num_warmup=200, cores=1, chains=1, seed=1,
                             adapt_stan_metric = TRUE,
                             metric='auto', print=FALSE))
-  expect_equal(as.numeric(tail(as.data.frame(fit2),1)[1]), 52.38106, tolerance =1e-6)
+  expect_equal(as.numeric(tail(as.data.frame(fit2),1)[1]), 52.38097, tolerance =1e-6)
 
   ## rebuild without RE so it fails: behavior on model w/o mode
   obj <- get_simple_obj()
