@@ -1,11 +1,43 @@
 Package: SparseNUTS
-Title: What the Package Does (One Line, Title Case)
+Title: Sparse No-U-Turn MCMC Sampling for 'Template Model Builder'
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Bayesian inference powered by the sparse no-U-turn (SNUTS) algorithm by 
+ Monnahan et al. (in prep). SNUTS is implemented for 'Template Model Builder' ('TMB') models via the 'StanEstimators' interface, which improves sampling efficiency by decorrelating the posterior via a sparse metric prior to sampling. 'AD Model Builder' ('ADMB') models are also supported and have functionality is similar to 'Stan'. The 'rstan' and 'shinystan' packages are used for diagnostics and inference.
+URL: https://Cole-Monnahan-NOAA.github.io/SparseNUTS
+BugReports: https://github.com/Cole-Monnahan-NOAA/SparseNUTS/issues
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Depends:
+    R (>= 4.1.0),
+    StanEstimators
+Remotes:
+    andrjohns/StanEstimators
+Imports: ellipse,
+    rstan,
+    R2admb, 
+    ggplot2, 
+    rlang, 
+    microbenchmark,
+    snowfall,
+    mvtnorm,
+    Matrix,
+    future,
+    methods,
+    callr
+Suggests:
+    shinystan (>= 2.5.0),
+    matrixcalc (>= 1.0.3),
+    stats,
+    knitr,
+    TMB,
+    RTMB,
+    rmarkdown,
+    withr,
+    testthat (>= 2.1.0)
+VignetteBuilder: knitr
+Config/Needs/website: rmarkdown
