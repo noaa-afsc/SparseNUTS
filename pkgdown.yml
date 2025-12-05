@@ -1,0 +1,10 @@
+pandoc: 3.1.11
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  articles/SNUTS-for-TMB-models: SNUTS-for-TMB-models.html
+  SparseNUTS: SparseNUTS.html
+last_built: 2025-12-05T00:13Z
+urls:
+  reference: https://cole-monnahan-noaa.github.io/SparseNUTS/reference
+  article: https://cole-monnahan-noaa.github.io/SparseNUTS/articles
