@@ -506,7 +506,7 @@ sample_inits <- function(fit, chains){
 launch_shinytmb <- function(fit){
   if(!requireNamespace('shinystan', quietly = TRUE))
     stop("The shinystan package is required for this functionality")
-  shinystan::launch_shinystan(.as.shinyadnuts(fit))
+  shinystan::launch_shinystan(.as.shinysnuts(fit))
 }
 
 
@@ -798,3 +798,18 @@ extract_sampler_params <- function(fit, inc_warmup=FALSE){
   temp <- x[x==y]
   if(length(temp)>1) paste0(temp,'[',1:length(temp),']') else temp
 }))))}
+
+
+#' Check NUTS diagnostics of a fitted model
+#' @param fit A fitted SNUTS object
+#' @param print Whether to print the results to console
+#' @details This is a wrapper which calls the function \code{\link{StanEstimators::check_hmc_diagnostics}}
+#' @return A data.frame containing diagnostic results (invisibly)
+#' @export
+check_snuts_diagnostics <- function(fit, print=TRUE){
+  stopifnot(SparseNUTS::is.snutsfit(fit))
+  sp <- fit$sampler_params |> posterior::as_draws_df()
+  sp <- sp[sp$.iteration > fit$warmup,]
+  StanEstimators:::check_hmc_diagnostics(draws_df = sp,
+        max_treedepth = as.numeric(fit$max_treedepth), print=print)
+}

@@ -273,6 +273,7 @@ sample_snuts <-
                        metric=control$metric, #Stan metric!
                        max_treedepth=control$max_treedepth,
                        parallel_chains=cores, save_warmup=TRUE,
+                       check_diagnostics=FALSE,
                        num_chains = chains, seed = seed,
                        refresh=refresh, lower=lower, upper=upper,
                        ...)
