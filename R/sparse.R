@@ -59,9 +59,9 @@ as.tmbfit <- function(x, parnames, mle, invf, metric, model='anonymous'){
     }
   # make sure to call monitor *after* back-transforming the
   # parameters into the original, correlated space
-  mon <- cbind(variable=c(parnames, 'lp__'),
-               rstan::monitor(post, warmup = warmup, print=FALSE))
-  mon$n_eff <- round(mon$Bulk_ESS,0)
+  # mon <- cbind(variable=c(parnames, 'lp__'),
+  #              rstan::monitor(post, warmup = warmup, print=FALSE))
+  mon <- posterior::summarise_draws(post[-(1:warmup),,])
   x <- list(samples=post, sampler_params=spl, mle=mle,
             monitor=mon, model=model,
             metric=metric,

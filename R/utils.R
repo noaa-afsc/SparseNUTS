@@ -79,8 +79,8 @@ print.snutsfit <- function(x, ...){
   }
   cat("Average run time per chain was", round(rt,2),  ru, '\n')
   if(!is.null(x$monitor)){
-    minESS <- round(min(x$monitor$n_eff),2)
-    maxRhat <- round(max(x$monitor$Rhat),3)
+    minESS <- round(min(x$monitor$ess_bulk),1)
+    maxRhat <- round(max(x$monitor$rhat),3)
     if(is.finite(minESS) & is.finite(maxRhat)){
       cat(paste0("Minimum ESS=",
                  minESS,
@@ -268,7 +268,7 @@ plot_marginals <- function(fit, pars=NULL, mfrow=NULL,
       tmp <- par("usr"); xy <- c(.85,.88)
       text.x <- tmp[1]+xy[1]*diff(tmp[1:2])
       text.y <- tmp[3]+xy[2]*diff(tmp[3:4])
-      label <- paste0('ESS=', round(mon[ii,'n_eff'],2), "\nRhat=", round(mon[ii,'Rhat'],3))
+      label <- paste0('ESS=', round(mon[ii,'ess_bulk'],2), "\nRhat=", round(mon[ii,'rhat'],3))
       text(x=text.x, y=text.y, labels=label, cex=.8)
     }
     mtext(paste("",par), line=-1.6, adj=0, cex=.9)
