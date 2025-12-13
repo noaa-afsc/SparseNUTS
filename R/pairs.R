@@ -104,8 +104,8 @@ pairs.snutsfit <- function(x,
   diag <- match.arg(diag)
   order <- match.arg(order)
   par.names <- names(posterior)
-  ess <- fit$monitor$n_eff
-  Rhat <- fit$monitor$Rhat
+  ess <- fit$monitor$ess_bulk
+  Rhat <- fit$monitor$rhat
   if(add.inits & is.null(fit$inits)){
     warning("add.inits not possible when fit$inits slot is empty -- ignoring")
     add.inits <- FALSE
