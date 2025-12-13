@@ -1,6 +1,4 @@
 ## NOTE: This file was copied over from adnuts on 2025-12-04
-
-
 #' Plot pairwise parameter posteriors and optionally the MLE points and
 #' confidence ellipses.
 #'
@@ -37,7 +35,7 @@
 #'   (default 1)
 #' @param limits A list containing the ranges for each parameter
 #'   to use in plotting.
-#' @param add.mle Boolean whether to add 95\% confidence ellipses
+#' @param add.mle Boolean whether to add 95% confidence ellipses
 #' @param add.monitor Boolean whether to print effective sample
 #' @param add.inits Boolean whether to add the initial values to the plot
 #' @param unbounded Whether to use the bounded or unbounded
@@ -53,7 +51,7 @@
 #'   invertible Hessian was found (in \code{fit$mle}) then
 #'   estimated covariances are available to compare and added
 #'   automatically (red ellipses). Likewise, a "monitor" object
-#'   from \code{rstan::monitor} is attached as \code{fit$monitor}
+#'   from \code{posterior::summarize_draws} is attached as \code{fit$monitor}
 #'   and provides effective sample sizes (ESS) and Rhat
 #'   values. The ESS are used to potentially order the parameters
 #'   via argument \code{order}, but also printed on the diagonal.

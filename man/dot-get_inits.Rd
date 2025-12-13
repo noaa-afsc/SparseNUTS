@@ -4,14 +4,12 @@
 \alias{.get_inits}
 \title{Get a single initial value vector in untransformed model space}
 \usage{
-.get_inits(init, obj2, seed, inputs)
+.get_inits(init, obj2, inputs)
 }
 \arguments{
 \item{init}{The initial value strategy}
 
 \item{obj2}{The joint TMB model}
-
-\item{seed}{RNG seed}
 
 \item{inputs}{A list as returned by \code{.get_inputs}.}
 }

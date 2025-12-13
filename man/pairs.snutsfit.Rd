@@ -65,7 +65,7 @@ plot. The default is 1.3 for all parameters.}
 \item{limits}{A list containing the ranges for each parameter
 to use in plotting.}
 
-\item{add.mle}{Boolean whether to add 95\\% confidence ellipses}
+\item{add.mle}{Boolean whether to add 95\% confidence ellipses}
 
 \item{add.monitor}{Boolean whether to print effective sample}
 
@@ -94,7 +94,7 @@ package using either the NUTS or RWM MCMC algorithms. If an
 invertible Hessian was found (in \code{fit$mle}) then
 estimated covariances are available to compare and added
 automatically (red ellipses). Likewise, a "monitor" object
-from \code{rstan::monitor} is attached as \code{fit$monitor}
+from \code{posterior::summarize_draws} is attached as \code{fit$monitor}
 and provides effective sample sizes (ESS) and Rhat
 values. The ESS are used to potentially order the parameters
 via argument \code{order}, but also printed on the diagonal.
