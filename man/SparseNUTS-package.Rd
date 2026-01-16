@@ -69,14 +69,13 @@ version 2.14.1. http://mc-stan.org.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://Cole-Monnahan-NOAA.github.io/SparseNUTS}
-  \item \url{https://cole-monnahan-noaa.github.io/SparseNUTS/}
-  \item Report bugs at \url{https://github.com/Cole-Monnahan-NOAA/SparseNUTS/issues}
+  \item \url{https://noaa-afsc.github.io/SparseNUTS}
+  \item Report bugs at \url{https://github.com/noaa-afsc/SparseNUTS/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Cole Monnahan \email{cole.monnahan@noaa.gov}
 
 }
 \keyword{internal}
