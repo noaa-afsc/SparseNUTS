@@ -114,7 +114,6 @@ hist(xx$p_wrong, xlab='', main='p_wrong',breaks=breaks,
 curve(dbeta(x, shape1=dat$shape1, shape2=dat$shape2),
       from=min(xx$p_wrong),
       to=max(xx$p_wrong), add=TRUE, lwd=lwd)
-library(truncnorm)
 hist(xx$box_right, xlab='', main='box_right', breaks=breaks,
      freq=FALSE)
 # technically a truncated gamma but tiny amount of mass outside

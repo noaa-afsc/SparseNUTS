@@ -5,7 +5,7 @@ author: "Cole C. Monnahan"
 date: "`r Sys.Date()`"
 bibliography: refs.bib
 vignette: >
-  %\VignetteIndexEntry{Sparse NUTS for TMB models}
+  %\VignetteIndexEntry{Advanced usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
