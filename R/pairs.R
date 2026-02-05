@@ -38,6 +38,8 @@
 #' @param add.mle Boolean whether to add 95% confidence ellipses
 #' @param add.monitor Boolean whether to print effective sample
 #' @param add.inits Boolean whether to add the initial values to the plot
+#' @param point.col Color of posterior points. Default selects level of transparency depending on the number of samples.
+#' @param point.pch Shape of posterior points. Defaults to 16 if unspecified.
 #' @param unbounded Whether to use the bounded or unbounded
 #'   version of the parameters.  size (ESS) and Rhat values on
 #'   the diagonal.
@@ -75,6 +77,7 @@ pairs.snutsfit <- function(x,
                            acf.ylim=c(-1,1), ymult=NULL, axis.col=gray(.5),
                            label.cex=.8, limits=NULL,
                            add.mle=TRUE, add.monitor=TRUE, add.inits=FALSE,
+                           point.col=NULL, point.pch=NULL,
                            unbounded=FALSE, ...){
   fit <- x
   if(unbounded | !add.mle){
@@ -106,9 +109,10 @@ pairs.snutsfit <- function(x,
   par.names <- names(posterior)
   ess <- fit$monitor$ess_bulk
   Rhat <- fit$monitor$rhat
-  if(add.inits & is.null(fit$inits)){
-    warning("add.inits not possible when fit$inits slot is empty -- ignoring")
-    add.inits <- FALSE
+  if(add.inits){
+    if(is.null(fit$inits))  stop("add.inits not possible when fit$inits slot is empty")
+    if(!is.list(fit$inits)) stop("add.inits not possible when fit$inits is not a list")
+    if(dim(fit$samples)[2] != length(fit$inits)) stop("Length of inits does not match number of chains")
   }
   if(!is.null(pars) & length(pars)<=1)
     stop("pars argument <=1, only makes sense for >=2")
@@ -185,8 +189,10 @@ pairs.snutsfit <- function(x,
       }
       ## multiplier for the ranges, adjusts the whitespace around the
       ## plots
-      min.temp <- min(posterior[,pars.ind[i]], limit.temp[1], na.rm=TRUE)
-      max.temp <- max(posterior[,pars.ind[i]], limit.temp[2], na.rm=TRUE)
+      draws.tmp <- posterior[,pars.ind[i]]
+      if(add.inits) draws.tmp <- c(draws.tmp, sapply(fit$inits, \(x) x[i]))
+      min.temp <- min(draws.tmp, limit.temp[1], na.rm=TRUE)
+      max.temp <- max(draws.tmp, limit.temp[2], na.rm=TRUE)
       margin <- .15*(max.temp-min.temp)
       limits[[i]] <- c(min.temp-margin, max.temp+margin)
     }
@@ -194,11 +200,23 @@ pairs.snutsfit <- function(x,
   ## Change posterior point look depending on how many samples. Makes
   ## easier to read.
   N <- NROW(posterior)
-  mypch <- 16; mycol <- 1
-  if(N>=1000){
-    mycol <- rgb(0,0,0,.5)
-  } else if(N>=10000){
-    mycol <- rgb(0,0,0,.05)
+  if(!is.null(point.pch)){
+    mypch <- point.pch
+  } else {
+    mypch <- 16
+  }
+  if(!is.null(point.col)){
+    mycol <- point.col;
+  } else {
+    if(N>=200){
+      mycol <- rgb(0,0,0,.6)
+    } else if(N>=1000){
+      mycol <- rgb(0,0,0,.4)
+    } else if(N>=4000){
+      mycol <- rgb(0,0,0,.25)
+    } else if(N>=10000){
+      mycol <- rgb(0,0,0,.05)
+    }
   }
   if(is.null(divs)) divs <- rep(0, N)
   par(mfrow=c(n,n), mar=0*c(.1,.1,.1,.1), yaxs="i", xaxs="i", mgp=c(.25, .25,0),
@@ -261,7 +279,7 @@ pairs.snutsfit <- function(x,
           points(x=mle$est[jj], y=mle$est[ii],
                  pch=16, cex=.5, col='red')
           if(add.inits)
-            points(fit$inits[jj], fit$inits[ii], col='blue', cex=.5, pch=16)
+            lapply(fit$inits, \(init) points(init[jj], init[ii], col='blue', cex=1, pch=16))
           ## Get points of a bivariate normal 95% confidence contour
           if(!requireNamespace("ellipse", quietly=TRUE)){
             warning("ellipse package needs to be installed to show ellipses")
@@ -305,7 +323,7 @@ pairs.snutsfit <- function(x,
       if(row==1) mtext(pars[col], line=ifelse(col %% 2 ==1, .1, 1.1),
                        cex=label.cex)
       if(col==n)
-        mtext(pars[ii], side=4, line=ifelse(row %% 2 ==1, 0, 1), cex=label.cex)
+        mtext(pars[row], side=4, line=ifelse(row %% 2 ==1, 0, 1), cex=label.cex)
     }
   }
 }
