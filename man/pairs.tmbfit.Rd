@@ -26,6 +26,8 @@ confidence ellipses.}
 )
 }
 \arguments{
+\item{x}{A list as returned by \code{sample_nuts}.}
+
 \item{pars}{A character vector of parameters or integers
 representing which parameters to subset. Useful if the model
 has a larger number of parameters and you just want to show
@@ -83,8 +85,6 @@ the diagonal.}
 
 \item{...}{Arguments to be passed to plot call in lower
 triangular panels (scatterplots).}
-
-\item{fit}{A list as returned by \code{sample_nuts}.}
 }
 \value{
 Produces a plot, and returns nothing.
@@ -95,22 +95,21 @@ confidence ellipses.
 }
 \details{
 This function is modified from the base \code{pairs}
-code to work specifically with fits from the 'adnuts'
-package using either the NUTS or RWM MCMC algorithms. If an
+code to work specifically with fits from the \code{\link{sample_snuts}}
+function using the SNUTS algorithms. If an
 invertible Hessian was found (in \code{fit$mle}) then
 estimated covariances are available to compare and added
 automatically (red ellipses). Likewise, a "monitor" object
-from \code{posterior::summarize_draws} is attached as \code{fit$monitor}
+from \code{\link[posterior]{summarize_draws}} is attached as \code{fit$monitor}
 and provides effective sample sizes (ESS) and Rhat
 values. The ESS are used to potentially order the parameters
 via argument \code{order}, but also printed on the diagonal.
 }
 \examples{
-fit <- readRDS(system.file('examples', 'fit.RDS', package='adnuts'))
+fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
 pairs(fit)
 pairs(fit, pars=1:2)
 pairs(fit, pars=c(2,1))
-pairs(fit, pars=c('b', 'a'))
 pairs(fit, pars=1:2, order='slow')
 pairs(fit, pars=1:2, order='fast')
 pairs(fit, pars=1:2, order='mismatch')

@@ -1,5 +1,5 @@
 # SparseNUTS (development version)
 
-# SparseNUTS (0.0.0.9000)
+# SparseNUTS (0.0.1.0)
 
 * Initial version

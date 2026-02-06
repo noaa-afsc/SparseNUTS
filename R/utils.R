@@ -66,7 +66,7 @@ launch_shinytmb <- function(fit){
 #'   \code{extract}. Merging samples across chains should only be used for
 #'   inference after appropriate diagnostic checks. Do not calculate
 #'   diagnostics like Rhat or effective sample size after using this
-#'   function, instead, use \code{\link[rstan]{monitor}}. Likewise, warmup
+#'   function, instead, use \code{\link[posterior]{summarize_draws}}. Likewise, warmup
 #'   samples are not valid and should never be used for inference, but may
 #'   be useful in some cases for diagnosing issues.
 #'
@@ -186,7 +186,7 @@ extract_sampler_params <- function(fit, inc_warmup=FALSE){
 #' Check NUTS diagnostics of a fitted model
 #' @param fit A fitted SNUTS object
 #' @param print Whether to print the results to console
-#' @details This is a wrapper which calls the function \code{\link{StanEstimators::check_hmc_diagnostics}}
+#' @details This is a wrapper which calls the internal function \code{\link[StanEstimators]{check_hmc_diagnostics}}
 #' @return A data.frame containing diagnostic results (invisibly)
 #' @export
 check_snuts_diagnostics <- function(fit, print=TRUE){

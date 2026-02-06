@@ -2,7 +2,7 @@
 #' Plot pairwise parameter posteriors and optionally the MLE points and
 #' confidence ellipses.
 #'
-#' @param fit A list as returned by \code{sample_nuts}.
+#' @param x A list as returned by \code{sample_nuts}.
 #' @param pars A character vector of parameters or integers
 #'   representing which parameters to subset. Useful if the model
 #'   has a larger number of parameters and you just want to show
@@ -48,23 +48,22 @@
 #' @method pairs tmbfit
 #' @return Produces a plot, and returns nothing.
 #' @details This function is modified from the base \code{pairs}
-#'   code to work specifically with fits from the 'adnuts'
-#'   package using either the NUTS or RWM MCMC algorithms. If an
+#'   code to work specifically with fits from the \code{\link{sample_snuts}}
+#'   function using the SNUTS algorithms. If an
 #'   invertible Hessian was found (in \code{fit$mle}) then
 #'   estimated covariances are available to compare and added
 #'   automatically (red ellipses). Likewise, a "monitor" object
-#'   from \code{posterior::summarize_draws} is attached as \code{fit$monitor}
+#'   from \code{\link[posterior]{summarize_draws}} is attached as \code{fit$monitor}
 #'   and provides effective sample sizes (ESS) and Rhat
 #'   values. The ESS are used to potentially order the parameters
 #'   via argument \code{order}, but also printed on the diagonal.
 #' @export
 #' @author Cole Monnahan
 #' @examples
-#' fit <- readRDS(system.file('examples', 'fit.RDS', package='adnuts'))
+#' fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
 #' pairs(fit)
 #' pairs(fit, pars=1:2)
 #' pairs(fit, pars=c(2,1))
-#' pairs(fit, pars=c('b', 'a'))
 #' pairs(fit, pars=1:2, order='slow')
 #' pairs(fit, pars=1:2, order='fast')
 #' pairs(fit, pars=1:2, order='mismatch')
@@ -334,7 +333,7 @@ pairs.tmbfit <- function(x,
 #' parameter
 #'
 #' @param fit A fitted object returned by
-#'   \code{\link{sample_admb}}
+#'   \code{\link{sample_snuts}}
 #' @param log Whether to plot the axes in log space (default TRUE).
 #' @param plot Whether to plot it or not.
 #' @details It can be helpful to compare uncertainty estimates
@@ -370,7 +369,7 @@ plot_uncertainties <- function(fit, log=TRUE, plot=TRUE){
 #' Plot marginal distributions for a fitted model
 #'
 #' @param fit A fitted object returned by
-#'   \code{\link{sample_admb}}.
+#'   \code{\link{sample_snuts}}.
 #' @param pars A numeric or character vector of parameters which
 #'   to plot, for plotting a subset of the total (defaults to all)
 #' @param mfrow A custom grid size (vector of two) to be called
@@ -490,7 +489,7 @@ plot_marginals <- function(fit, pars=NULL, mfrow=NULL,
 #' Plot adaptation metrics for a fitted model.
 #'
 #' @param fit A fitted object returned by
-#' \code{\link{sample_admb}}.
+#' \code{\link{sample_snuts}}.
 #' @param plot Whether to plot the results
 #' @return Prints and invisibly returns a ggplot object
 #'
@@ -534,7 +533,7 @@ plot_sampler_params <- function(fit, plot=TRUE){
 #'   shows whether an element is 0 (white) or not (gray), while
 #'   the lower triangle shows the correlation calculated from
 #'   \code{cov2cor(solve(Q))}.
-#' @return A plot created by \code{Matrix::image}.
+#' @return A plot created by \code{\link[Matrix]{image}}.
 #' @export
 plot_Q <- function(fit, Q=NULL){
   if(is.null(Q)){

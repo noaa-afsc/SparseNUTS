@@ -8,7 +8,7 @@
 \method{as.data.frame}{tmbfit}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
-\item{x}{Fitted object from \code{\link{sample_rwm}}}
+\item{x}{Fitted object from \code{\link{sample_snuts}}}
 
 \item{row.names}{Ignored}
 

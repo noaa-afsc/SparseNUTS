@@ -65,7 +65,7 @@ as.tmbfit <- function(x, parnames, mle, invf, metric, model='anonymous'){
 #' Convert object of class tmbfit to data.frame. Calls
 #' \code{\link{extract_samples}}
 #'
-#' @param x Fitted object from \code{\link{sample_rwm}}
+#' @param x Fitted object from \code{\link{sample_snuts}}
 #' @param row.names Ignored
 #' @param optional Ignored
 #' @param ... Ignored

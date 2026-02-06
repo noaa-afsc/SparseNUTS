@@ -1,6 +1,6 @@
 test_that("diagnostics and plotting", {
   skip_if(skip_TMB)
-  fit <- readRDS('fit_snuts.RDS')
+  fit <- readRDS('fit.RDS')
   sp <- extract_sampler_params(fit)
   expect_is(sp,  'data.frame')
   plot_sampler_params(fit, plot=TRUE)

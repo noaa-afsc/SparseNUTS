@@ -60,7 +60,8 @@ are 'adapt_delta', 'max_treedepth', and 'metric' which is
 the type of metric adaptation for Stan to do with options
 ('unit_e', 'diag_e', or 'dense_e'). For dense and sparse
 metrics this usually can be 'unit_e' to skip adaptation.
-NULL values (default) revert to \code{stan_sample} defaults.}
+NULL values (default) revert to
+\code{\link[StanEstimators]{stan_sample}} defaults.}
 
 \item{seed}{Random number seed, used for generating initial
 values (if 'random") and for NUTS.}
@@ -132,7 +133,7 @@ warmup performance and adjust as necessary for subsequent
 runs.}
 
 \item{...}{Additional arguments to pass to
-\code{\link{StanEstimators::stan_sample}}.}
+\code{\link[StanEstimators]{stan_sample}}.}
 }
 \value{
 A fitted MCMC object of class 'tmbfit'

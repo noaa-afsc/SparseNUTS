@@ -45,7 +45,8 @@
 #'   the type of metric adaptation for Stan to do with options
 #'   ('unit_e', 'diag_e', or 'dense_e'). For dense and sparse
 #'   metrics this usually can be 'unit_e' to skip adaptation.
-#'   NULL values (default) revert to \code{stan_sample} defaults.
+#'   NULL values (default) revert to
+#'   \code{\link[StanEstimators]{stan_sample}} defaults.
 #' @param seed Random number seed, used for generating initial
 #'   values (if 'random") and for NUTS.
 #' @param laplace Whether to leave the Laplace approximation on
@@ -81,7 +82,7 @@
 #'   warmup performance and adjust as necessary for subsequent
 #'   runs.
 #' @param ... Additional arguments to pass to
-#'   \code{\link{StanEstimators::stan_sample}}.
+#'   \code{\link[StanEstimators]{stan_sample}}.
 #' @return A fitted MCMC object of class 'tmbfit'
 #'
 #' @details

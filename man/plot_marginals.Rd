@@ -15,7 +15,7 @@ plot_marginals(
 }
 \arguments{
 \item{fit}{A fitted object returned by
-\code{\link{sample_admb}}.}
+\code{\link{sample_snuts}}.}
 
 \item{pars}{A numeric or character vector of parameters which
 to plot, for plotting a subset of the total (defaults to all)}

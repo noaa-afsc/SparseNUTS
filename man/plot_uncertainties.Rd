@@ -9,7 +9,7 @@ plot_uncertainties(fit, log = TRUE, plot = TRUE)
 }
 \arguments{
 \item{fit}{A fitted object returned by
-\code{\link{sample_admb}}}
+\code{\link{sample_snuts}}}
 
 \item{log}{Whether to plot the axes in log space (default TRUE).}
 

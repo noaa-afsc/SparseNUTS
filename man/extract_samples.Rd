@@ -43,7 +43,7 @@ This function is loosely based on the \pkg{rstan} function
 \code{extract}. Merging samples across chains should only be used for
 inference after appropriate diagnostic checks. Do not calculate
 diagnostics like Rhat or effective sample size after using this
-function, instead, use \code{\link[rstan]{monitor}}. Likewise, warmup
+function, instead, use \code{\link[posterior]{summarize_draws}}. Likewise, warmup
 samples are not valid and should never be used for inference, but may
 be useful in some cases for diagnosing issues.
 }

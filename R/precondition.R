@@ -4,16 +4,15 @@
 
 
 
-#' Prepare inputs for sparse sampling
-#'
-#'  @param obj Object
-#'  @param skip_optimization Whether to skip or not
-#'  @param laplace Whether to due the LA or not
-#'  @param metric Which metric
-#'  @param Q Sparse precision
-#'  @param Qinv Inverse of Q
-#'  @return A list containing Q, Qinv, the mle list, and timings
-#'
+# #' Prepare inputs for sparse sampling
+# #'
+# #'  @param obj TMB object
+# #'  @param skip_optimization Whether to skip or not
+# #'  @param laplace Whether to due the LA or not
+# #'  @param metric Which metric
+# #'  @param Q Sparse precision
+# #'  @param Qinv Inverse of Q
+# #'  @return A list containing Q, Qinv, the mle list, and timings
 .get_inputs <- function(obj, skip_optimization, laplace, metric, Q, Qinv) {
 
   time.opt <- time.Q <- time.Qinv <- 0
@@ -242,10 +241,10 @@
     L <- Matrix::tril(Matrix::drop0(L)) ## class(L) == "dtCMatrix"
     Lt <- Matrix::t(L) ## class(Lt) == "dtCMatrix"
     x.cur <- lapply(y.cur, \(y) as.vector(Lt %*% y[perm]))
-    fn2 <- function(y)  fn(Matrix::solve(Lt, y)[iperm])
-    gr2 <- function(y){
-      x <- Matrix::solve(Lt, y)[iperm]
-      Matrix::solve(L, as.numeric(gr(x))[perm])
+    fn2 <- function(x)  fn(Matrix::solve(Lt, x)[iperm])
+    gr2 <- function(x){
+      y <- Matrix::solve(Lt, x)[iperm]
+      Matrix::solve(L, as.numeric(gr(y))[perm])
     }
     finv <- function(x)   as.numeric(Matrix::solve(Lt, x)[iperm])
   } else if(metric=='auto'){

@@ -14,7 +14,7 @@ plot_Q(fit, Q = NULL)
 \code{fit}.}
 }
 \value{
-A plot created by \code{Matrix::image}.
+A plot created by \code{\link[Matrix]{image}}.
 }
 \description{
 Make an image plot showing the correlation (lower triangle)

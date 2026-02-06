@@ -8,7 +8,7 @@ plot_sampler_params(fit, plot = TRUE)
 }
 \arguments{
 \item{fit}{A fitted object returned by
-\code{\link{sample_admb}}.}
+\code{\link{sample_snuts}}.}
 
 \item{plot}{Whether to plot the results}
 }
