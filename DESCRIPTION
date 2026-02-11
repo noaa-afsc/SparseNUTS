@@ -1,6 +1,6 @@
 Package: SparseNUTS
 Title: Sparse No-U-Turn MCMC Sampling for 'Template Model Builder'
-Version: 1.0.0
+Version: 1.0.0.9000
 Authors@R: 
     person("Cole", "Monnahan", , "cole.monnahan@noaa.gov", role = c("aut", "cre"))
 Description: Bayesian inference powered by the sparse no-U-turn (SNUTS) algorithm by 
