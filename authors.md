@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/noaa-afsc/SparseNUTS/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/noaa-afsc/SparseNUTS/blob/v1.0.0/DESCRIPTION)
 
 Monnahan C (2026). *SparseNUTS: Sparse No-U-Turn MCMC Sampling for
 'Template Model Builder'*. R package version 1.0.0,
