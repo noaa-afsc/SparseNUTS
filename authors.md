@@ -10,13 +10,13 @@ Source:
 [`DESCRIPTION`](https://github.com/noaa-afsc/SparseNUTS/blob/main/DESCRIPTION)
 
 Monnahan C (2026). *SparseNUTS: Sparse No-U-Turn MCMC Sampling for
-'Template Model Builder'*. R package version 0.0.0.9000,
+'Template Model Builder'*. R package version 1.0.0,
 <https://noaa-afsc.github.io/SparseNUTS>.
 
     @Manual{,
       title = {SparseNUTS: Sparse No-U-Turn MCMC Sampling for 'Template Model Builder'},
       author = {Cole Monnahan},
       year = {2026},
-      note = {R package version 0.0.0.9000},
+      note = {R package version 1.0.0},
       url = {https://noaa-afsc.github.io/SparseNUTS},
     }

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SparseNUTS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,21 +187,21 @@ function as follows:</p>
 <pre><code><span><span class="co">## Starting MCMC sampling...</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Gradient evaluation took 8.1e-05 seconds</span></span>
-<span><span class="co">## 1000 transitions using 10 leapfrog steps per transition would take 0.81 seconds.</span></span>
+<span><span class="co">## Gradient evaluation took 0.000101 seconds</span></span>
+<span><span class="co">## 1000 transitions using 10 leapfrog steps per transition would take 1.01 seconds.</span></span>
 <span><span class="co">## Adjust your expectations accordingly!</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##  Elapsed Time: 0.096 seconds (Warm-up)</span></span>
-<span><span class="co">##                0.598 seconds (Sampling)</span></span>
-<span><span class="co">##                0.694 seconds (Total)</span></span>
+<span><span class="co">##  Elapsed Time: 0.102 seconds (Warm-up)</span></span>
+<span><span class="co">##                0.636 seconds (Sampling)</span></span>
+<span><span class="co">##                0.738 seconds (Total)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Model 'schools' has 10 pars, and was fit using NUTS with a 'diag' metric</span></span>
 <span><span class="co">## 1 chain(s) of 1150 total iterations (150 warmup) were used</span></span>
-<span><span class="co">## Average run time per chain was 0.69 seconds </span></span>
+<span><span class="co">## Average run time per chain was 0.74 seconds </span></span>
 <span><span class="co">## Minimum ESS=265.6 (26.56%), and maximum Rhat=1.003</span></span>
 <span><span class="co">## There were 0 divergences after warmup</span></span></code></pre>
 <p>The returned object <code>fit</code> (an object of ‘adfit’ S3 class)
@@ -274,7 +274,7 @@ can be accessed in more depth via the <code>monitor</code> slot:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Model 'schools' has 10 pars, and was fit using NUTS with a 'diag' metric</span></span>
 <span><span class="co">## 1 chain(s) of 1150 total iterations (150 warmup) were used</span></span>
-<span><span class="co">## Average run time per chain was 0.69 seconds </span></span>
+<span><span class="co">## Average run time per chain was 0.74 seconds </span></span>
 <span><span class="co">## Minimum ESS=265.6 (26.56%), and maximum Rhat=1.003</span></span>
 <span><span class="co">## There were 0 divergences after warmup</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
