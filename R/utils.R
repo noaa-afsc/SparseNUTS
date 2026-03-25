@@ -231,18 +231,33 @@ get_post <- function(x, invf, parnames, array=FALSE) {
 
 #' Print matrix stats
 #'
-#' @param x matrix object
-#'
-.print.mat.stats <- function(x){
-  if(is.null(x)) return(NULL)
+#' @param Q A sparse precision matrix
+#' @param Qinv A dense covariance matrix
+#' @return Prints the HMC condition factor and sparsity of the
+#'   matrix and returns the HMC condition factor
+#' @details The HMC condition factor used is from Langmore et al.
+#'   (2019). A NULL value is returned if the matrix passed is a
+#'   scalar.
+.print.mat.stats <- function(Q=NULL, Qinv=NULL){
+  if(is.null(Q) & is.null(Qinv)) return(NULL)
+  if(!is.null(Q) & !is.null(Qinv)) stop('Only one of Q or Qinv can be specified')
+  if(is.null(Q)){
+    x <- Qinv
+    nm <- 'Qinv'
+    ev <- eigen(x,TRUE)$value
+  }  else {
+    x <- Q
+    nm <- 'Q'
+    # need eigen values for covariance not precision so do 1/ev
+    ev <- 1/eigen(x,TRUE)$value
+  }
   if(NROW(x)==1) return(NULL) # not a matrix!
-  nm <- deparse(substitute(x))
-  e <- eigen(x,TRUE)
-  mine <- min(e$value); maxe <- max(e$value); ratio <- maxe/mine
+  # see Langmore et al. https://arxiv.org/abs/1905.09813
+  factor <- sum((max(ev)/ev)^4)^(1/4)
   pct.sparsity <- round(100*mean(x[lower.tri(x)] == 0),2)
   message(nm, " is ", pct.sparsity,
-          "% zeroes, with condition factor=",round(ratio,0),
-          ' (min=',round(mine,3), ', max=', round(maxe,1),")")
+          "% zeroes, with HMC condition factor=",round(factor,0))
+  return(invisible(factor))
 }
 
 #' Get the joint precision matrix Q from an optimized TMB or RTMB obj.

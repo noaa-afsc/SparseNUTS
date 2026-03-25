@@ -293,6 +293,7 @@ sample_snuts <-
     fit2$time.Q <- inputs$time.Q; fit2$time.Qinv <- inputs$time.Qinv;
     fit2$time.opt <- inputs$time.opt
     fit2$inits <- yinits
+    fit2$condition.factor <- inputs$condition.factor
      cat('\n\n')
     if(print) print(fit2)
     return(invisible(fit2))

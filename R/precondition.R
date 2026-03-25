@@ -60,13 +60,13 @@
       }
     }
     dimnames(Qinv) <- list(parnames,parnames)
-    .print.mat.stats(Q)
+    cf <- .print.mat.stats(Q=Q)
     #.print.mat.stats(Qinv)
     stopifnot(all.equal(length(mle), nrow(Qinv)))
   } else { #laplace is turned on
     message("Getting M for fixed effects...")
     time.Qinv <- as.numeric(system.time(Qinv <- .get_Qinv(obj))[3])
-    .print.mat.stats(Qinv)
+    cf <- .print.mat.stats(Qinv=Qinv)
     if(!is.null(opt)){
       mle <- opt$par
     } else {
@@ -93,7 +93,7 @@
               cor=mycor, Q=Q)#,              Qinv=Qinv)
   out <- list(Q=Q, Qinv=Qinv, mle=mle, time.opt=time.opt,
               time.Qinv=time.Qinv, time.Q=time.Q, parnames=parnames,
-              laplace=laplace, metric=metric)
+              laplace=laplace, metric=metric, condition.factor=cf)
   return(out)
 }
 

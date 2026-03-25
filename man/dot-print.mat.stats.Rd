@@ -4,11 +4,22 @@
 \alias{.print.mat.stats}
 \title{Print matrix stats}
 \usage{
-.print.mat.stats(x)
+.print.mat.stats(Q = NULL, Qinv = NULL)
 }
 \arguments{
-\item{x}{matrix object}
+\item{Q}{A sparse precision matrix}
+
+\item{Qinv}{A dense covariance matrix}
+}
+\value{
+Prints the HMC condition factor and sparsity of the
+matrix and returns the HMC condition factor
 }
 \description{
 Print matrix stats
+}
+\details{
+The HMC condition factor used is from Langmore et al.
+(2019). A NULL value is returned if the matrix passed is a
+scalar.
 }
