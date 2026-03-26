@@ -4,16 +4,15 @@
 \alias{.print.mat.stats}
 \title{Print matrix stats}
 \usage{
-.print.mat.stats(Q = NULL, Qinv = NULL)
+.print.mat.stats(stats)
 }
 \arguments{
-\item{Q}{A sparse precision matrix}
+\item{Qstats}{A list of sparse precision matrix stats}
 
-\item{Qinv}{A dense covariance matrix}
+\item{Qinv}{A list dense covariance matrix stats}
 }
 \value{
-Prints the HMC condition factor and sparsity of the
-matrix and returns the HMC condition factor
+Prints the HMC condition factor, sparsity, and max absolute correlation
 }
 \description{
 Print matrix stats

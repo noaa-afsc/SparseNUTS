@@ -238,8 +238,7 @@ sample_snuts <-
     }
     # now can transform the parameter space via the metric selected
     rotation <- .rotate_posterior(metric=metric, fn=obj2$fn,
-                                  gr=obj2$gr, Q=inputs$Q,
-                                  Qinv=inputs$Qinv,
+                                  gr=obj2$gr, inputs,
                                   y.cur=yinits)
     if(rotation_only) return(rotation)
     fsparse <- function(v) {dyn.load(mydll); -rotation$fn2(v)}

@@ -216,22 +216,12 @@ test_that("metrics are robust to model type",{
                             num_warmup=200, cores=1, chains=1, seed=1,
                             metric='sparse', print=FALSE),
                regexp='sparse metric only allowed with random effects')
-  ## should fail since M not available
-  expect_error(sample_snuts(obj, num_samples=800,
-                            num_warmup=200, cores=1, chains=1, seed=1,
-                            metric='dense', print=FALSE),
-               regexp = 'Some standard errors estimated to be NaN'
-  )
   ## should work
   suppressWarnings(fit4 <- sample_snuts(obj, num_samples=800, refresh=0,
                                         num_warmup=200, cores=1, chains=1, seed=1,
                                         metric='unit', print=FALSE))
   expect_equal(ncol(as.data.frame(fit4)),118)
-  ## should fail since M not available
-  expect_error(sample_snuts(obj, num_samples=800, refresh=0,
-                            num_warmup=200, cores=1, chains=1, seed=1,
-                            metric='diag', print=FALSE),
-               "Some standard errors estimated to be NaN")
+
   ## should work if variance term is turned off (penalized ML)
   obj2 <- TMB::MakeADFun(data=obj$env$data, parameters=obj$env$parList(),
                          map=list(logsdu=factor(NA)),

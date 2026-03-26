@@ -4,7 +4,7 @@
 \alias{.rotate_posterior}
 \title{Update algorithm for mass matrix.}
 \usage{
-.rotate_posterior(metric, fn, gr, Q, Qinv, y.cur)
+.rotate_posterior(metric, fn, gr, inputs, y.cur)
 }
 \arguments{
 \item{metric}{The metric to use}
@@ -13,11 +13,11 @@
 
 \item{gr}{The current gr function}
 
+\item{y.cur}{The current parameter vector in unrotated (Y) space.}
+
 \item{Q}{The sparse precision matrix}
 
 \item{Qinv}{The inverse of Q}
-
-\item{y.cur}{The current parameter vector in unrotated (Y) space.}
 }
 \description{
 Update algorithm for mass matrix.

@@ -231,79 +231,112 @@ get_post <- function(x, invf, parnames, array=FALSE) {
 
 #' Print matrix stats
 #'
-#' @param Q A sparse precision matrix
-#' @param Qinv A dense covariance matrix
-#' @return Prints the HMC condition factor and sparsity of the
-#'   matrix and returns the HMC condition factor
+#' @param Qstats A list of sparse precision matrix stats
+#' @param Qinv A list dense covariance matrix stats
+#' @return Prints the HMC condition factor, sparsity, and max absolute correlation
 #' @details The HMC condition factor used is from Langmore et al.
 #'   (2019). A NULL value is returned if the matrix passed is a
 #'   scalar.
-.print.mat.stats <- function(Q=NULL, Qinv=NULL){
-  if(is.null(Q) & is.null(Qinv)) return(NULL)
-  if(!is.null(Q) & !is.null(Qinv)) stop('Only one of Q or Qinv can be specified')
-  if(is.null(Q)){
-    x <- Qinv
+.print.mat.stats <- function(stats){
+  if(!is.null(stats$Qinv)){
+    x <- stats$Qinv
+    if(NROW(x)==1) return(NULL) # not a matrix!
     nm <- 'Qinv'
     ev <- eigen(x,TRUE)$value
-  }  else {
-    x <- Q
+  } else {
+    x <- stats$Q
+    if(NROW(x)==1) return(NULL) # not a matrix!
     nm <- 'Q'
     # need eigen values for covariance not precision so do 1/ev
     ev <- 1/eigen(x,TRUE)$value
   }
-  if(NROW(x)==1) return(NULL) # not a matrix!
+  maxcor <- stats$max_cor
   # see Langmore et al. https://arxiv.org/abs/1905.09813
   factor <- sum((max(ev)/ev)^4)^(1/4)
   pct.sparsity <- round(100*mean(x[lower.tri(x)] == 0),2)
   message(nm, " is ", pct.sparsity,
-          "% zeroes, with HMC condition factor=",round(factor,0))
+          "% zeroes | HMC condition factor=",round(factor,0),
+          ' | max cor >=', round(maxcor,4))
   return(invisible(factor))
 }
 
-#' Get the joint precision matrix Q from an optimized TMB or RTMB obj.
+#' Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the \function{Takahashi_Davis} function in the \pkg{sparseinverse} package.
 #'
 #' @param obj An optimized TMB or RTMB object
-#' @return A sparse matrix Q
+#' @param Q An optional sparse precision matrix if previous calculated. Otherwise calculated internally.
 #'
-.get_Q <- function(obj){
+#' @return A list containing a sparse matrix Q, the standard errors derived from the square root of the diagonal of the inverse of Q, and the lower bound on the maximum correlation among parameters.
+#'
+.get_Q_stats <- function(obj=NULL, Q=NULL){
   isRTMB <- ifelse(obj$env$DLL=='RTMB', TRUE, FALSE)
   if(length(obj$env$random)==0){
     warning("Q not available for models without random effects")
     return(NULL)
   }
-  if(isRTMB){
-    Q <- RTMB::sdreport(obj, getJointPrecision=TRUE,                                              skip.delta.method=TRUE)$jointPrecision
-  } else {
-    Q <- TMB::sdreport(obj, getJointPrecision=TRUE,
-                       skip.delta.method=TRUE)$jointPrecision
+  if(is.null(Q)){
+    if(isRTMB){
+      Q <- RTMB::sdreport(obj, getJointPrecision=TRUE,                                              skip.delta.method=TRUE)$jointPrecision
+    } else {
+      Q <- TMB::sdreport(obj, getJointPrecision=TRUE,
+                           skip.delta.method=TRUE)$jointPrecision
+    }
   }
-  return(Q)
+  d <- nrow(Q)
+  est <- obj$env$last.par.best
+  stopifnot(d==length(est))
+  inverse_subset <- sparseinv::Takahashi_Davis(Q=Q)
+  ses <- sqrt(Matrix::diag(inverse_subset))
+  rows <- inverse_subset@i + 1
+  cols <- rep(1:d, diff(inverse_subset@p))
+  vals <- inverse_subset@x
+  # Filter out diagonals
+  ind <- rows != cols
+  cors <-
+    vals[ind]/(ses[rows[ind]]* ses[cols[ind]])
+  max_cor <- max(abs(cors))
+  parnames <- .make_unique_names(names(est))
+  dimnames(Q) <- list(parnames, parnames)
+  names(est) <- names(ses) <- parnames
+  stopifnot(length(est)==nrow(Q))
+  stats <- list(Q=Q, ses=ses, est=est, max_cor=max_cor)
+  stats$condition.factor <- .print.mat.stats(stats=stats)
+  return(stats)
 }
 
-#' Get the joint covariance Sigma from an optimized TMB or RTMB
-#' obj without random effects.
-#'
+
+
+#' Get the covariance matrix Qinv from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation.
 #' @param obj An optimized TMB or RTMB object
-#' @return A dense matrix Sigma
+#' @param Qinv An optional covariance matrix if previous calculated. Otherwise calculated internally.
 #'
-.get_Qinv <- function(obj){
+#' @return A list containing a covariance matrix Qinv, the standard errors derived from the square root of the diagonal of Qinv, and the lower bound on the maximum correlation among parameters.
+#'
+.get_Qinv_stats <- function(obj=NULL, Qinv=NULL){
   isRTMB <- ifelse(obj$env$DLL=='RTMB', TRUE, FALSE)
-  # breaks w/ Laplace turned on so need to catch it before use
-  # if(length(obj$env$random)>0){
-  #   warning("Qinv does not make sense for models with random effects")
-  #   return(NULL)
-  # }
-  if(isRTMB){
-    Qinv <- RTMB::sdreport(obj, skip.delta.method=TRUE)$cov.fixed
-  } else {
-    Qinv <- TMB::sdreport(obj, skip.delta.method=TRUE)$cov.fixed
+  if(is.null(Qinv)){
+    if(isRTMB){
+      Qinv <- RTMB::sdreport(obj, skip.delta.method=TRUE)$cov.fixed
+    } else {
+      Qinv <- TMB::sdreport(obj, skip.delta.method=TRUE)$cov.fixed
+    }
   }
-  return(Qinv)
-}
-
-
-
-
+  npar <- nrow(Qinv)
+  est <- obj$env$last.par.best
+  if(npar>1){
+    ses <- sqrt(diag(Qinv))
+    cor <- stats::cov2cor(Qinv)
+    max_cor <- max(abs(cor[lower.tri(cor, diag=FALSE)]))
+  } else {
+    ses <- sqrt(Qinv)
+    max_cor <- NA
+  }
+  parnames <- .make_unique_names(names(obj$par))
+  dimnames(Qinv) <- list(parnames, parnames)
+  names(est) <- names(ses) <- parnames
+  stats <- list(Qinv=Qinv, ses=ses, est=est, max_cor=max_cor)
+  stats$condition.factor <- .print.mat.stats(stats=stats)
+  return(stats)
+  }
 
 #' Calculate gradient timings on a model for different metrics
 #'
@@ -334,10 +367,10 @@ benchmark_metrics <- function(obj, times=1000, metrics=NULL,
   obj$env$beSilent()
   opt <- with(obj, nlminb(par, fn, gr))
   if(hasRE){
-    Q <- .get_Q(obj)
+    Q <- .get_Q_stats(obj)[['Q']]
     M <- solve(as.matrix(Q))
   } else {
-    M <- .get_Qinv(obj)
+    M <- .get_Qinv_stats(obj)[['Qinv']]
     Q <- solve(M)
   }
   n <- length(obj$env$last.par.best)
@@ -357,4 +390,17 @@ benchmark_metrics <- function(obj, times=1000, metrics=NULL,
     cbind(pct.sparsity=round(100*mean(Q[lower.tri(Q)] == 0),2)) |>
     cbind(npar=length(obj$env$last.par.best))
   res
+}
+
+
+rmvn_Q <- function(n, Q, df=Inf){
+  L <- Matrix::Cholesky(Q, super=TRUE, LDL=FALSE)
+  u <- matrix(rnorm(ncol(L)*n), ncol(L), n)
+  ## NOTE: This code requires LDL=FALSE
+  u <- Matrix::solve(L, u, system="Lt") ## Solve Lt^-1 %*% u
+  u <- Matrix::solve(L, u, system="Pt") ## Multiply Pt %*% u
+  u <- as.matrix(u) # mean-0 white noise with covar=Q^-1
+  if(is.infinite(df)) return(u)
+  g <- rgamma(n=n, shape=df/2, rate=df/2)
+
 }

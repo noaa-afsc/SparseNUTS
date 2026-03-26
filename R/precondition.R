@@ -13,8 +13,7 @@
 # #'  @param Q Sparse precision
 # #'  @param Qinv Inverse of Q
 # #'  @return A list containing Q, Qinv, the mle list, and timings
-.get_inputs <- function(obj, skip_optimization, laplace, metric, Q, Qinv) {
-
+.get_inputs <-  function(obj, skip_optimization, laplace, metric, Q, Qinv) {
   time.opt <- time.Q <- time.Qinv <- 0
   if(metric=='stan'){
     parnames <- .make_unique_names(names(obj$env$last.par.best))
@@ -37,63 +36,38 @@
   if( (laplace | !hasRE) & metric=='sparse')
     stop("sparse metric only allowed with random effects
            and laplace=FALSE")
-  if(!laplace){
-    mle <- obj$env$last.par.best
+  if(hasRE & !laplace){
     ## Make parameter names unique if vectors exist
-    parnames <- .make_unique_names(names(mle))
-    if(is.null(Q) & hasRE){
-      message("Getting Q...")
-      time.Q <- as.numeric(system.time(
-        Q <- .get_Q(obj))[3])
-    }
-    if(!is.null(Q))  dimnames(Q) <- list(parnames, parnames)
-    if(is.null(Qinv)){
-      if(!is.null(Q)){
-        ## Q found above
-        message("Inverting Q...")
-        time.Qinv <- as.numeric(system.time(Qinv <- solve(Q))[3])
-      } else if(!hasRE){
-        ## fixed effect only model
-        time.Qinv <- as.numeric(system.time(Qinv <- .get_Qinv(obj))[3])
-      } else {
-        stop("something wrong here")
-      }
-    }
-    dimnames(Qinv) <- list(parnames,parnames)
-    cf <- .print.mat.stats(Q=Q)
-    #.print.mat.stats(Qinv)
-    stopifnot(all.equal(length(mle), nrow(Qinv)))
-  } else { #laplace is turned on
-    message("Getting M for fixed effects...")
-    time.Qinv <- as.numeric(system.time(Qinv <- .get_Qinv(obj))[3])
-    cf <- .print.mat.stats(Qinv=Qinv)
-    if(!is.null(opt)){
-      mle <- opt$par
-    } else {
-      mle <- obj$par
-    }
-    ## Make parameter names unique if vectors exist
-    parnames <- .make_unique_names(names(mle))
-    stopifnot(all.equal(length(mle), nrow(Qinv)))
+    message("Getting Q and its stats...")
+    time.Q <- as.numeric(system.time(
+      stats <- .get_Q_stats(obj=obj, Q=Q))[3]
+      )
+  } else {
+    ## fixed effect only model so get Qinv (covariance)
+    message("Getting Qinv and stats for fixed effects...")
+    time.Qinv <-
+      as.numeric(system.time(
+        stats <- .get_Qinv_stats(obj=obj, Qinv=Qinv))[3]
+        )
+    # otherwise will be joint
+   if(laplace) stats$est <- opt$par
   }
-  ses <- suppressWarnings(sqrt(diag(Qinv)))
-  mycor <- suppressWarnings(stats::cov2cor(Qinv))
-
+  est <- stats$est
+  ses <- stats$ses
+  parnames <- .make_unique_names(names(est))
   if(!all(is.finite(ses))){
     if(metric %in% c('unit', 'auto')){
-      warning("Some standard errors estimated to be NaN, filling with dummy values so unit metric works. The 'mle' slot will be wrong so do not use it")
-      cor <- diag(length(mle))
-      ses <- rep(1,length(mle))
+      warning("Some standard errors estimated to be NaN, so downstream plotting may be affected.")
     } else {
-      stop("Some standard errors estimated to be NaN, use 'unit' metric for models without a mode or positive definite Hessian")
+      stop("Some standard errors estimated to be NaN, use 'unit' or 'stan' metric for models without a mode or positive definite Hessian")
     }
   }
-  names(mle) <- parnames
-  mle <- list(nopar=length(mle), est=mle, se=ses,
-              cor=mycor, Q=Q)#,              Qinv=Qinv)
-  out <- list(Q=Q, Qinv=Qinv, mle=mle, time.opt=time.opt,
+  mle <- list(nopar=length(est), est=est, se=ses)
+  if(!is.null(Qinv)) mle$cor <- cov2cor(Qinv)
+  out <- list(Q=stats[['Q']], Qinv=stats[['Qinv']], mle=mle, time.opt=time.opt,
               time.Qinv=time.Qinv, time.Q=time.Q, parnames=parnames,
-              laplace=laplace, metric=metric, condition.factor=cf)
+              laplace=laplace, metric=metric, max_cor=stats$max_cor,
+              condition.factor=stats$condition.factor)
   return(out)
 }
 
@@ -119,6 +93,7 @@
     lpb <- lpb[!obj2$env$lrandom()]
   }
   npars <- length(lpb)
+
   for(ii in 1:10){
     inits <-
       switch(init,
@@ -156,9 +131,15 @@
 #' @param y.cur The current parameter vector in unrotated (Y) space.
 #' @param Q The sparse precision matrix
 #' @param Qinv The inverse of Q
-.rotate_posterior <- function(metric, fn, gr, Q,  Qinv, y.cur){
+.rotate_posterior <- function(metric, fn, gr, inputs, y.cur){
   ## Rotation done using choleski decomposition
+  Q <- inputs$Q
+  Qinv <- inputs$Qinv
   if(metric=='dense'){
+    if(is.null(Qinv)){
+      if(is.null(Q)) stop("Neither Q nor Qinv available for dense preconditioner")
+      Qinv <- solve(Q)
+    }
     ## First case is a dense mass matrix
     M <- as.matrix(Qinv)
     # took this out b/c it was warning too often, better way to test?
@@ -177,10 +158,10 @@
       t(chd %*% x)
     }
   } else if(metric=='diag'){
-    M <- diag(as.matrix(Qinv))
     ## diagonal but not unit
+    if(is.null(inputs$mle$se)) stop("diag metric failed since SE unavailable")
     J <- NULL
-    chd <- sqrt(M)
+    chd <- inputs$mle$se
     fn2 <- function(x) fn(chd * x)
     gr2 <- function(x) as.vector(gr(chd * x) ) * chd
     ## Now rotate back to "x" space using the new mass matrix M. M is a
@@ -203,16 +184,21 @@
     if(!is(Q,"Matrix")) stop("Q is not a Matrix object, something went wrong")
     # M is actually Q, i.e., the inverse-mass
     # Antidiagonal matrix JJ = I
-    J = Matrix::sparseMatrix( i=1:nrow(Q), j=nrow(Q):1 )
+    J <- Matrix::sparseMatrix( i=1:nrow(Q), j=nrow(Q):1 )
     #chd <- Cholesky(M, super=FALSE, perm=FALSE)
     #chd <- Matrix::Cholesky(M, super=TRUE, perm=FALSE)
     chd <- Matrix::Cholesky(J%*%Q%*%J, super=TRUE, perm=FALSE) # perm
     Linv_times_x = function(chd,x){
-      as.numeric(J%*% Matrix::solve(chd, Matrix::solve(chd, J%*%x, system="Lt"), system="Pt"))
+      as.numeric(
+        J%*% Matrix::solve(chd, Matrix::solve(chd, J%*%x, system="Lt"), system="Pt")
+        )
     }
     x_times_Linv = function(chd,x){
       #x %*% chol()
-      as.numeric(J%*%Matrix::solve(chd, Matrix::solve(chd, Matrix::t(x%*%J), system="L"), system="Pt"))
+      as.numeric(
+        J%*%Matrix::solve(chd, Matrix::solve(chd, Matrix::t(x%*%J), system="L"),
+                          system="Pt")
+        )
     }
     fn2 <- function(x){
       Linv_x = Linv_times_x(chd, x)
@@ -228,9 +214,13 @@
     # J%*%chol(J%*%prec%*%J) %*% J%*%x
     x.cur <- lapply(y.cur, \(y) as.numeric(J%*%chol(J%*%Q%*%J) %*% J%*%y))
     finv <- function(x){
-      t(as.numeric(J%*%Matrix::solve(chd, Matrix::solve(chd, J%*%x, system="Lt"), system="Pt")))
+      t(as.numeric(
+        J%*%Matrix::solve(chd, Matrix::solve(chd, J%*%x, system="Lt"), system="Pt")
+      )
+      )
     }
   } else if(metric=='sparse'){
+    if(!is(Q,"Matrix")) stop("Q is not a Matrix object, something went wrong")
     # Do Cholesky on Q permuted directly
     J <- NULL
     chd <- Matrix::Cholesky(Q, super=TRUE, perm=TRUE)
@@ -248,64 +238,63 @@
     }
     finv <- function(x)   as.numeric(Matrix::solve(Lt, x)[iperm])
   } else if(metric=='auto'){
-    ## use recursion then pick the right one depending on several criteria
-    if(!is.null(Q) && NROW(Q)>1) rsparse <- .rotate_posterior(metric='sparse', fn=fn, gr=gr, Q=Q, Qinv=Qinv, y.cur=y.cur)
-    if(!is.null(Qinv))
-      rdiag <- .rotate_posterior(metric='diag', fn=fn, gr=gr, Q=Q, Qinv=Qinv, y.cur=y.cur)
-    if(!is.null(Qinv) && NROW(Qinv)>1){
-      rdense <- tryCatch(.rotate_posterior(metric='dense', fn=fn, gr=gr, Q=Q, Qinv=Qinv, y.cur=y.cur),
-                         error=function(e) "Failed")
-    }
-    runit <- .rotate_posterior(metric='unit', fn=fn, gr=gr, Q=Q, Qinv=Qinv, y.cur=y.cur)
-
-    if(NROW(Qinv)==1){
+    if(NROW(Qinv)==1 | NROW(Q)==1){
       message("diag metric selected b/c only 1 parameter")
+      rdiag <-
+        .rotate_posterior(metric='diag', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
       return(rdiag)
     }
 
-    if(is.character(rdense)){
-      message("unit metric selected b/c Qinv was not positive definite")
+    if((is.null(Q) & is.null(Qinv)) |
+       is.null(inputs$max_cor) |
+       !is.finite(inputs$max_cor)){
+      message("unit metric selected b/c Q and Qinv unavailable")
+      runit <-
+        .rotate_posterior(metric='unit', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
       return(runit)
     }
 
-    if(is.null(Q)){
-      if(is.null(Qinv)){
-        # must be unit since no other option
-        message("unit metric selected b/c no Q or Qinv info available")
-        return(runit)
+
+    if(inputs$max_cor <= 0.2){
+      message("diag metric selected b/c low max cor (", round(inputs$max_cor,4),")")
+      rdiag <-
+        .rotate_posterior(metric='diag', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
+      return(rdiag)
+    }
+
+    # high correlations exist
+    # fixed effects only models or ELA
+    if(is.null(Q) & !is.null(Qinv)){
+      message("dense metric selected b/c no Q and high max cor (", round(inputs$max_cor,4),")")
+      rdense <-
+        .rotate_posterior(metric='dense', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
+      return(rdense)
+    }
+
+    # random effects models with sparse Q and high correlation
+    if(!is.null(Q)){
+      if(nrow(Q)>500){
+        # high dimension, skip dense calcs since sparse almost always faster
+        message("sparse metric selected b/c high dimesions and high max cor (", round(inputs$max_cor,4),")")
+        rsparse <-
+          .rotate_posterior(metric='sparse', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
       } else {
-        # no Q but does have Qinv, e.g., a model w/o RE or using the LA
-        ## check for high correlations
-        cors <- stats::cov2cor(Qinv)[lower.tri(Qinv, diag=FALSE)]
-        if(NROW(cors)==1) {
-          message("diag metric selected b/c only a single parameter")
-          return(rdiag)
-        } else if(max(abs(cors))<.3){
-          message("diag metric selected b/c low correlations (max=",
-                  round(max(abs(cors)),4), ")")
-          return(rdiag)
-        } else {
-          message("dense metric selected b/c high correlation (max=",
-                  round(max(abs(cors)),4), ")")
-          return(rdense)
-        }
-      }
-    } else {
-      # has a Q
-      cors <- stats::cov2cor(Qinv)[lower.tri(Qinv, diag=FALSE)]
-      if(max(abs(cors))<.3){
-        message("diag metric selected b/c of low correlations (max=",
-                round(max(abs(cors)),4), ")")
-        return(rdiag)
-      } else {
+        # low dimension sometimes dense is faster so check it
         if(!requireNamespace("microbenchmark", quietly=TRUE)){
-          message("sparse metric selected b/c no timing available -- please install microbenchmark")
+          message("sparse metric selected b/c no timing available. Please install microbenchmark")
+          rsparse <-
+            .rotate_posterior(metric='sparse', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
           ## check for speed differences
           return(rsparse)
         } else {
           # when doing timing need to add random components to
           # input, otherwise TMB may skip calculations and throw
           # off benchmarking
+          rsparse <-
+            .rotate_posterior(metric='sparse', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
+          if(is.null(Qinv)) inputs$Qinv <- as.matrix(Matrix::solve(Q))
+          rdense <-
+            .rotate_posterior(metric='dense', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
           npars <- length(rdense$x.cur[[1]])
           bench <- microbenchmark::microbenchmark(
             rdense$gr2(rdense$x.cur[[1]]+rnorm(npars, sd=1e-10)),
@@ -316,22 +305,19 @@
           tsparse <- summary(bench)$median[2]
           if(tdense < tsparse){
             message("dense metric selected b/c faster than sparse and high correlation (max=",
-                    round(max(abs(cors)),4), ")")
+                    round(inputs$max_cor,4), ")")
             return(rdense)
           } else {
             message("sparse metric selected b/c faster than dense and high correlation (max=",
-                    round(max(abs(cors)),4), ")")
+                    round(inputs$max_cor, 4), ")")
             return(rsparse)
           }
         }
       }
     }
-  }  else {
-    stop("Invalid metric")
+  } else {
+    stop("Invalid metric specified")
   }
-  ## Redefine these functions
-  ## Need to adjust the current parameters so the chain is
-  ## continuous. First rotate to be in Y space.
   return(list(gr2=gr2, fn2=fn2, finv=finv, x.cur=x.cur, chd=chd, J=J, metric=metric))
 }
 
