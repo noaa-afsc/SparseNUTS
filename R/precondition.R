@@ -67,6 +67,7 @@
   mle <- list(nopar=length(est), est=est, se=ses,
               Q=stats[['Q']], Qinv=stats[['Qinv']])
   if(is.null(skip_cor)) skip_cor <- ifelse(mle$nopar <= 2000, FALSE, TRUE)
+  if(mle$nopar==1) skip_cor <- TRUE
   stopifnot(is.logical(skip_cor))
   if(!skip_cor){
     if(!is.null(stats[['Qinv']])) {

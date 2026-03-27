@@ -172,7 +172,7 @@ pairs.tmbfit <- function(x,
   ## subset when looping
   pars.ind <- match(x=pars, table=names(posterior))
   n <- length(pars.ind)
-  n.mle <- ifelse(is.null(mle$cor), 0, NROW(mle$cor))
+  n.mle <- ifelse(is.null(mle$est), 0, length(mle$est))
   if(n==1) stop("This function is only meaningful for >1 parameter")
   if(is.null(ymult)) ymult <- rep(1.3, n)
   ## If no limits given, calculate the max range of the posterior samples and
@@ -283,11 +283,19 @@ pairs.tmbfit <- function(x,
           if(!requireNamespace("ellipse", quietly=TRUE)){
             warning("ellipse package needs to be installed to show ellipses")
           } else {
-            ellipse.temp <- ellipse::ellipse(x=mle$cor[jj, ii],
-                                    scale=mle$se[c(jj, ii)],
-                                    centre= mle$est[c(jj, ii)], npoints=1000,
-                                    level=.95)
-            lines(ellipse.temp , lwd=.5, lty=1, col="red")
+            cor.tmp <- NULL
+            if(!is.null(mle$cor)){
+              cor.tmp <- mle$cor[jj, ii]
+            } else if(!is.null(mle$Q)){
+              cor.tmp <- get_sparse_correlation(mle$Q, jj, ii)
+            }
+            if(!is.null(cor.tmp)){
+              ellipse.temp <- ellipse::ellipse(x=cor.tmp,
+                                               scale=mle$se[c(jj, ii)],
+                                               centre= mle$est[c(jj, ii)], npoints=1000,
+                                               level=.95)
+              lines(ellipse.temp , lwd=.5, lty=1, col="red")
+            }
           }
         }
         par(xaxs="i", yaxs="i")

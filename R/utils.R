@@ -433,4 +433,35 @@ mymvnorm <- function(inputs, df=Inf){
   }
 }
 
+#' Extract a single correlation from a sparse precision matrix
+#' @param Q The sparse precision
+#' @param i,j The integer indices for the correlation
+#' @return A single scalar correlation value
+#' @details This function extracts correlations without having to
+#'   invert Q using sparse matrix routines. Used for plotting outputs only.
+get_sparse_correlation <- function(Q, i, j) {
+  if(class(Q)!='dsCMatrix')
+    stop("This function only works for dsCMatrix objects")
+  n <- nrow(Q)
+  # Create unit vectors e_i and e_j
+  ei <- Matrix::sparseVector(1, i, length=n)
+  ej <- Matrix::sparseVector(1, j, length=n)
 
+  # Solve Qx = e_i and Qy = e_j
+  # 'solve' on a sparse Q uses sparse Cholesky internally
+  col_i <- Matrix::solve(Q, ei)
+  col_j <- Matrix::solve(Q, ej)
+
+  # Extract components
+  var_i <- col_i[i]
+  var_j <- col_j[j]
+  cov_ij <- col_i[j]
+
+  # Calculate correlation
+  cor <- cov_ij / sqrt(var_i * var_j)
+  if(! (is.numeric(cor) & is.finite(cor))){
+    warning('Correlation estimated from Q was not valid for indices: ', i, ', ', j,'. Try setting add.mle=FALSE')
+  }
+  #message("done with ", i, " ", j)
+  return(cor)
+}
