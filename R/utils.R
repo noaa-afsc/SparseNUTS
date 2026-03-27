@@ -260,7 +260,7 @@ get_post <- function(x, invf, parnames, array=FALSE) {
   return(invisible(factor))
 }
 
-#' Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the \function{Takahashi_Davis} function in the \pkg{sparseinverse} package.
+#' Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the Takahashi_Davis function in the \pkg{sparseinverse} package.
 #'
 #' @param obj An optimized TMB or RTMB object
 #' @param Q An optional sparse precision matrix if previous calculated. Otherwise calculated internally.
@@ -392,15 +392,35 @@ benchmark_metrics <- function(obj, times=1000, metrics=NULL,
   res
 }
 
-
-rmvn_Q <- function(n, Q, df=Inf){
-  L <- Matrix::Cholesky(Q, super=TRUE, LDL=FALSE)
-  u <- matrix(rnorm(ncol(L)*n), ncol(L), n)
-  ## NOTE: This code requires LDL=FALSE
-  u <- Matrix::solve(L, u, system="Lt") ## Solve Lt^-1 %*% u
-  u <- Matrix::solve(L, u, system="Pt") ## Multiply Pt %*% u
-  u <- as.matrix(u) # mean-0 white noise with covar=Q^-1
-  if(is.infinite(df)) return(u)
-  g <- rgamma(n=n, shape=df/2, rate=df/2)
-
+## Simulate a single draw from either a normal (df=Inf) or t distribution (df<Inf) using the sparse precision Q if available, otherwise the dense covariance.
+## @param inputs A list returned by .get_inits
+mymvnorm <- function(inputs, df=Inf){
+  Q <- inputs[['Q']]
+  Qinv <- inputs$Qinv
+  if(!is.null(Q)){
+    # use efficient precision sampling
+    if(class(Q)!='dsCMatrix')
+      stop("This function only works for dsCMatrix objects")
+    L <- Matrix::Cholesky(Q, super=TRUE, LDL=FALSE)
+    u <- matrix(rnorm(ncol(L)), ncol(L))
+    ## NOTE: This code requires LDL=FALSE
+    u <- Matrix::solve(L, u, system="Lt") ## Solve Lt^-1 %*% u
+    u <- Matrix::solve(L, u, system="Pt") ## Multiply Pt %*% u
+    u <- as.numeric(u) # mean-0 white noise with covar=Q^-1
+    if(is.infinite(df)) return(u)
+    # construct t from u via inverse gamma relationship
+    g <- rgamma(n=1, shape=df/2, rate=df/2)
+    u/sqrt(g)
+  } else if(!is.null(Qinv)) {
+    if(is.infinite(df)){
+      u <- mvtnorm::rmvnorm(n=1, sigma=Qinv)
+    } else {
+      u <- mvtnorm::rmvt(n=1, sigma=inputs$Qinv, df=df)
+    }
+    return(as.numeric(u))
+  } else {
+    stop("Neither Q nor Qinv available to simulate")
+  }
 }
+
+

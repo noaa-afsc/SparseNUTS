@@ -93,13 +93,12 @@
     lpb <- lpb[!obj2$env$lrandom()]
   }
   npars <- length(lpb)
-
   for(ii in 1:10){
     inits <-
       switch(init,
              'last.par.best' = lpb,
-             'random-t'      = inputs$mle$est + mvtnorm::rmvt(n=1, sigma=inputs$Qinv, df=2),
-             'random'        = inputs$mle$est + mvtnorm::rmvnorm(n=1, sigma=inputs$Qinv),
+             'random-t'      = inputs$mle$est + mymvnorm(inputs, df=2),
+             'random'        = inputs$mle$est + mymvnorm(inputs, df=Inf),
              'unif'          = runif(n=npars, min=-2, max=2))
     inits <- as.numeric(inits)
     if(length(inits)!=npars)
@@ -278,6 +277,7 @@
         message("sparse metric selected b/c high dimesions and high max cor (", round(inputs$max_cor,4),")")
         rsparse <-
           .rotate_posterior(metric='sparse', fn=fn, gr=gr, inputs=inputs, y.cur=y.cur)
+        return(rsparse)
       } else {
         # low dimension sometimes dense is faster so check it
         if(!requireNamespace("microbenchmark", quietly=TRUE)){
