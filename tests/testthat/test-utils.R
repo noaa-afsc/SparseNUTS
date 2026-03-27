@@ -1,9 +1,9 @@
 
 test_that("HMC condition factor", {
   Q <- readRDS('fit.RDS')$mle$Q
-  cf1 <- .print.mat.stats(stats=list(Q=Q, max_cor=.1))
-  cf2 <- .print.mat.stats(stats=list(Qinv=solve(Q), max_cor=.1))
-  cf2a <- .print.mat.stats(stats=list(Qinv=solve(as.matrix(Q)), max_cor=.1))
+  cf1 <- .print.mat.stats(stats=list(Q=Q, max_cor=.1), TRUE)
+  cf2 <- .print.mat.stats(stats=list(Qinv=solve(Q), max_cor=.1), TRUE)
+  cf2a <- .print.mat.stats(stats=list(Qinv=solve(as.matrix(Q)), max_cor=.1),TRUE)
   expect_equal(cf1,cf2,cf2a)
 })
 

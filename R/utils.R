@@ -231,43 +231,52 @@ get_post <- function(x, invf, parnames, array=FALSE) {
 
 #' Print matrix stats
 #'
-#' @param Qstats A list of sparse precision matrix stats
-#' @param Qinv A list dense covariance matrix stats
+#' @param stats A list of matrix stats
+#' @param getCF A flag whether to calculate the HMC condition factor.
 #' @return Prints the HMC condition factor, sparsity, and max absolute correlation
 #' @details The HMC condition factor used is from Langmore et al.
 #'   (2019). A NULL value is returned if the matrix passed is a
-#'   scalar.
-.print.mat.stats <- function(stats){
+#'   scalar or if getCF=FALSE.
+.print.mat.stats <- function(stats, getCF){
   if(!is.null(stats$Qinv)){
     x <- stats$Qinv
     if(NROW(x)==1) return(NULL) # not a matrix!
     nm <- 'Qinv'
-    ev <- eigen(x,TRUE)$value
+    if(getCF) ev <- eigen(x,TRUE)$value
   } else {
-    x <- stats$Q
+    x <- stats[['Q']]
     if(NROW(x)==1) return(NULL) # not a matrix!
     nm <- 'Q'
     # need eigen values for covariance not precision so do 1/ev
-    ev <- 1/eigen(x,TRUE)$value
+    if(getCF) ev <- 1/eigen(x,TRUE)$value
   }
   maxcor <- stats$max_cor
-  # see Langmore et al. https://arxiv.org/abs/1905.09813
-  factor <- sum((max(ev)/ev)^4)^(1/4)
   pct.sparsity <- round(100*mean(x[lower.tri(x)] == 0),2)
-  message(nm, " is ", pct.sparsity,
-          "% zeroes | HMC condition factor=",round(factor,0),
-          ' | max cor >=', round(maxcor,4))
+  # see Langmore et al. https://arxiv.org/abs/1905.09813
+  if(getCF){
+  factor <- sum((max(ev)/ev)^4)^(1/4)
+    message(nm, " is ", pct.sparsity,
+            "% sparse | HMC condition factor=",round(factor,0),
+            ' | max cor >=', round(maxcor,4))
   return(invisible(factor))
+  } else {
+    factor <- max(stats$se)/min(stats$se)
+    message(nm, " is ", pct.sparsity,
+            "% sparse | Ratio of marginal SDs=",round(factor,1),
+            ' | Max abs cor >=', round(maxcor,4))
+    return(NULL)
+  }
 }
 
 #' Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the Takahashi_Davis function in the \pkg{sparseinverse} package.
 #'
 #' @param obj An optimized TMB or RTMB object
 #' @param Q An optional sparse precision matrix if previous calculated. Otherwise calculated internally.
+#' @param getCF A flag to determine whether to calculate the HMC condition factor. Set to FASLE by default due to poor performance in high dimensions even for a sparse Q.
 #'
 #' @return A list containing a sparse matrix Q, the standard errors derived from the square root of the diagonal of the inverse of Q, and the lower bound on the maximum correlation among parameters.
 #'
-.get_Q_stats <- function(obj=NULL, Q=NULL){
+.get_Q_stats <- function(obj=NULL, Q=NULL, getCF=FALSE){
   isRTMB <- ifelse(obj$env$DLL=='RTMB', TRUE, FALSE)
   if(length(obj$env$random)==0){
     warning("Q not available for models without random effects")
@@ -299,7 +308,7 @@ get_post <- function(x, invf, parnames, array=FALSE) {
   names(est) <- names(ses) <- parnames
   stopifnot(length(est)==nrow(Q))
   stats <- list(Q=Q, ses=ses, est=est, max_cor=max_cor)
-  stats$condition.factor <- .print.mat.stats(stats=stats)
+  stats$condition.factor <- .print.mat.stats(stats=stats, getCF=getCF)
   return(stats)
 }
 
@@ -308,10 +317,11 @@ get_post <- function(x, invf, parnames, array=FALSE) {
 #' Get the covariance matrix Qinv from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation.
 #' @param obj An optimized TMB or RTMB object
 #' @param Qinv An optional covariance matrix if previous calculated. Otherwise calculated internally.
+#' @param getCF A flag whether to calculate the HMC condition factor. Set to FALSE by default because it is slow in high dimensions.
 #'
 #' @return A list containing a covariance matrix Qinv, the standard errors derived from the square root of the diagonal of Qinv, and the lower bound on the maximum correlation among parameters.
 #'
-.get_Qinv_stats <- function(obj=NULL, Qinv=NULL){
+.get_Qinv_stats <- function(obj=NULL, Qinv=NULL, getCF=FALSE){
   isRTMB <- ifelse(obj$env$DLL=='RTMB', TRUE, FALSE)
   if(is.null(Qinv)){
     if(isRTMB){
@@ -334,7 +344,7 @@ get_post <- function(x, invf, parnames, array=FALSE) {
   dimnames(Qinv) <- list(parnames, parnames)
   names(est) <- names(ses) <- parnames
   stats <- list(Qinv=Qinv, ses=ses, est=est, max_cor=max_cor)
-  stats$condition.factor <- .print.mat.stats(stats=stats)
+  stats$condition.factor <- .print.mat.stats(stats=stats, getCF=getCF)
   return(stats)
   }
 

@@ -2,18 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{.get_Q_stats}
 \alias{.get_Q_stats}
-\title{Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the \function{Takahashi_Davis} function in the \pkg{sparseinverse} package.}
+\title{Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the Takahashi_Davis function in the \pkg{sparseinverse} package.}
 \usage{
-.get_Q_stats(obj = NULL, Q = NULL)
+.get_Q_stats(obj = NULL, Q = NULL, getCF = FALSE)
 }
 \arguments{
 \item{obj}{An optimized TMB or RTMB object}
 
 \item{Q}{An optional sparse precision matrix if previous calculated. Otherwise calculated internally.}
+
+\item{getCF}{A flag to determine whether to calculate the HMC condition factor. Set to FASLE by default due to poor performance in high dimensions even for a sparse Q.}
 }
 \value{
 A list containing a sparse matrix Q, the standard errors derived from the square root of the diagonal of the inverse of Q, and the lower bound on the maximum correlation among parameters.
 }
 \description{
-Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the \function{Takahashi_Davis} function in the \pkg{sparseinverse} package.
+Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the Takahashi_Davis function in the \pkg{sparseinverse} package.
 }

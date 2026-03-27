@@ -4,12 +4,14 @@
 \alias{.get_Qinv_stats}
 \title{Get the covariance matrix Qinv from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation.}
 \usage{
-.get_Qinv_stats(obj = NULL, Qinv = NULL)
+.get_Qinv_stats(obj = NULL, Qinv = NULL, getCF = FALSE)
 }
 \arguments{
 \item{obj}{An optimized TMB or RTMB object}
 
 \item{Qinv}{An optional covariance matrix if previous calculated. Otherwise calculated internally.}
+
+\item{getCF}{A flag whether to calculate the HMC condition factor. Set to FALSE by default because it is slow in high dimensions.}
 }
 \value{
 A list containing a covariance matrix Qinv, the standard errors derived from the square root of the diagonal of Qinv, and the lower bound on the maximum correlation among parameters.

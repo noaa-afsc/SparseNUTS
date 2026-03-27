@@ -82,7 +82,7 @@ test_that("random inits work", {
   for(seed in 1:20){
     for(init in c('last.par.best', 'random', 'random-t', 'unif')){
       suppressMessages(tmpfit <- sample_snuts(obj, num_samples=50, num_warmup=200, cores=1,
-                                  chains=1, seed=seed, metric='unit',
+                                  chains=1, seed=seed, metric='sparse',
                                   init=init, refresh=0, Q=Q, Qinv=Qinv, print=FALSE,
                                   control=list(max_treedepth=1, adapt_delta=.99)))
       out <- data.frame(init=init, seed=seed, iter=1:250,
@@ -91,14 +91,16 @@ test_that("random inits work", {
     }
   }
   out2 <- subset(out, iter==1)
+  # browser()
   mean_lps <- as.numeric(tapply(out2$lp, INDEX=out2$init, FUN=mean))
   expect_equal(mean_lps,
-               c( -6.430412,  -8.537960, -16.277104,  -9.259841),
+               c( -6.317931,  -8.484669, -19.525751, -10.849454),
                tolerance =1e-6)
-  # library(ggplot2)
-  # ggplot(out2, aes(x=init, y=lp)) + geom_jitter(width=.1, height=0)
-  # ggplot(out, aes(iter, y=lp, color=init, group=interaction(init,seed))) +
-  #   geom_line()
+  #  library(ggplot2)
+  #  ggplot(out2, aes(x=init, y=lp)) + geom_jitter(width=.1, height=0)
+  #  ggplot(out, aes(iter, y=lp, color=factor(seed), group=interaction(init,seed))) +
+  #    geom_line() + facet_wrap('init')
+  #  pairs(tmpfit, add.inits=TRUE)
 })
 
 test_that("benchmark works", {
