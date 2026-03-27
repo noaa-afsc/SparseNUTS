@@ -55,6 +55,11 @@
 #' @param skip_optimization Whether to skip optimization or not
 #'   (default). If the model is already optimized and Q available
 #'   these redundant steps can be skipped.
+#' @param skip_cor Whether to skip calculating and returning a
+#'   dense correlation matrix which is used for downstream
+#'   plotting. For large models this can be very costly. Default
+#'   is NULL which indicates to return it if the dimension is
+#'   less than 1000 only.
 #' @param Q The sparse precision matrix. It is calculated
 #'   internally if not specified (default).
 #' @param Qinv The dense matrix \eqn{Q^{-1}}. It is calculated internally
@@ -158,7 +163,8 @@ sample_snuts <-
            init=c('last.par.best', 'random', 'random-t', 'unif'),
            metric=c('auto', 'unit', 'diag', 'dense',
                     'sparse', 'stan', 'sparse-naive'),
-           skip_optimization=FALSE, Q=NULL, Qinv=NULL,
+           skip_optimization=FALSE,
+           skip_cor=NULL, Q=NULL, Qinv=NULL,
            globals=NULL, model_name=NULL, refresh=NULL,
            print=TRUE, rotation_only=FALSE,
            lower=NULL, upper=NULL,
@@ -196,7 +202,8 @@ sample_snuts <-
     # This function optimizes and gets Q and Qinv, depending on
     # metric, except 'stan' which skips that all.
     inputs <- .get_inputs(obj=obj, skip_optimization=skip_optimization,
-                          laplace=laplace, metric=metric, Q=Q, Qinv=Qinv)
+                          laplace=laplace, metric=metric, Q=Q, Qinv=Qinv,
+                          skip_cor=skip_cor)
     # build new joint object here so can test initial values next
     mydll <- unclass(getLoadedDLLs()[[obj$env$DLL]])$path
     isRTMB <- ifelse(obj$env$DLL=='RTMB', TRUE, FALSE)

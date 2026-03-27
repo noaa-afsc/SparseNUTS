@@ -278,7 +278,7 @@ get_post <- function(x, invf, parnames, array=FALSE) {
 #'
 .get_Q_stats <- function(obj=NULL, Q=NULL, getCF=FALSE){
   isRTMB <- ifelse(obj$env$DLL=='RTMB', TRUE, FALSE)
-  if(length(obj$env$random)==0){
+  if(!is.null(obj) & length(obj$env$random)==0){
     warning("Q not available for models without random effects")
     return(NULL)
   }
@@ -405,8 +405,8 @@ benchmark_metrics <- function(obj, times=1000, metrics=NULL,
 ## Simulate a single draw from either a normal (df=Inf) or t distribution (df<Inf) using the sparse precision Q if available, otherwise the dense covariance.
 ## @param inputs A list returned by .get_inits
 mymvnorm <- function(inputs, df=Inf){
-  Q <- inputs[['Q']]
-  Qinv <- inputs$Qinv
+  Q <- inputs$mle[['Q']]
+  Qinv <- inputs$mle$Qinv
   if(!is.null(Q)){
     # use efficient precision sampling
     if(class(Q)!='dsCMatrix')

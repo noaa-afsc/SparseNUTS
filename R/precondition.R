@@ -12,8 +12,10 @@
 # #'  @param metric Which metric
 # #'  @param Q Sparse precision
 # #'  @param Qinv Inverse of Q
+# #'  @param skip.cor Whether to skip calculating the correlation matrix
 # #'  @return A list containing Q, Qinv, the mle list, and timings
-.get_inputs <-  function(obj, skip_optimization, laplace, metric, Q, Qinv) {
+.get_inputs <-  function(obj, skip_optimization, laplace, metric, Q, Qinv,
+                         skip_cor) {
   time.opt <- time.Q <- time.Qinv <- 0
   if(metric=='stan'){
     parnames <- .make_unique_names(names(obj$env$last.par.best))
@@ -62,9 +64,22 @@
       stop("Some standard errors estimated to be NaN, use 'unit' or 'stan' metric for models without a mode or positive definite Hessian")
     }
   }
-  mle <- list(nopar=length(est), est=est, se=ses)
-  if(!is.null(Qinv)) mle$cor <- cov2cor(Qinv)
-  out <- list(Q=stats[['Q']], Qinv=stats[['Qinv']], mle=mle, time.opt=time.opt,
+  mle <- list(nopar=length(est), est=est, se=ses,
+              Q=stats[['Q']], Qinv=stats[['Qinv']])
+  if(is.null(skip_cor)) skip_cor <- ifelse(mle$nopar <= 2000, FALSE, TRUE)
+  stopifnot(is.logical(skip_cor))
+  if(!skip_cor){
+    if(!is.null(stats[['Qinv']])) {
+      mle$cor <- cov2cor(stats[['Qinv']])
+    } else if(!is.null(stats[['Q']])) {
+      mle$cor <- cov2cor(as.matrix(Matrix::solve(stats[['Q']])))
+    } else {
+      stop("skip_cor is TRUE but no Q or Qinv available")
+    }
+    # known exactly now so use it
+    stats$max_cor <- max(abs(mle$cor[lower.tri(mle$cor)]))
+  }
+  out <- list(mle=mle, time.opt=time.opt,
               time.Qinv=time.Qinv, time.Q=time.Q, parnames=parnames,
               laplace=laplace, metric=metric, max_cor=stats$max_cor,
               condition.factor=stats$condition.factor)
@@ -132,8 +147,8 @@
 #' @param Qinv The inverse of Q
 .rotate_posterior <- function(metric, fn, gr, inputs, y.cur){
   ## Rotation done using choleski decomposition
-  Q <- inputs$Q
-  Qinv <- inputs$Qinv
+  Q <- inputs$mle[['Q']]
+  Qinv <- inputs$mle[['Qinv']]
   if(metric=='dense'){
     if(is.null(Qinv)){
       if(is.null(Q)) stop("Neither Q nor Qinv available for dense preconditioner")
