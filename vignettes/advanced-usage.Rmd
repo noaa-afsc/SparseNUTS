@@ -168,11 +168,11 @@ PSIS-LOO is the recommended way to compare predictive performance of Bayesian mo
 
 ```{r}
 library(loo)
-options(mc.cores=parallel::detectCores())
+#library(parallel)
+#options(mc.cores=parallel::detectCores()-1)
 loglik <- apply(post,1, \(x) obj$report(x)$loglik) |> 
   t()
-
-loo1 <- loo(loglik, cores=4)
+loo1 <- loo(loglik, cores=1)
 print(loo1)
 plot(loo1)
 

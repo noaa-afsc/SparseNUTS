@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 
-The goal of SparseNUTS provides an interface for performing Bayesian
+The goal of SparseNUTS is to provide an interface for performing Bayesian
 analyses using the no-U-turn (NUTS) MCMC algorithm for
 TMB and RTMB models. 
 

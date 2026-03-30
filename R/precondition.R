@@ -160,9 +160,8 @@
 #' @param metric The metric to use
 #' @param fn The current fn function.
 #' @param gr The current gr function
+#' @param inputs A list of inputs
 #' @param y.cur The current parameter vector in unrotated (Y) space.
-#' @param Q The sparse precision matrix
-#' @param Qinv The inverse of Q
 .rotate_posterior <- function(metric, fn, gr, inputs, y.cur){
   ## Rotation done using choleski decomposition
   Q <- inputs$mle[['Q']]

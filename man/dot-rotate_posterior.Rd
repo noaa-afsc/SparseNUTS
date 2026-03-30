@@ -13,11 +13,9 @@
 
 \item{gr}{The current gr function}
 
+\item{inputs}{A list of inputs}
+
 \item{y.cur}{The current parameter vector in unrotated (Y) space.}
-
-\item{Q}{The sparse precision matrix}
-
-\item{Qinv}{The inverse of Q}
 }
 \description{
 Update algorithm for mass matrix.

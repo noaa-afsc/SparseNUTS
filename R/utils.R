@@ -409,7 +409,7 @@ mymvnorm <- function(inputs, df=Inf){
   Qinv <- inputs$mle$Qinv
   if(!is.null(Q)){
     # use efficient precision sampling
-    if(class(Q)!='dsCMatrix')
+    if(!is(Q, 'dsCMatrix'))
       stop("This function only works for dsCMatrix objects")
     L <- Matrix::Cholesky(Q, super=TRUE, LDL=FALSE)
     u <- matrix(rnorm(ncol(L)), ncol(L))
@@ -419,7 +419,7 @@ mymvnorm <- function(inputs, df=Inf){
     u <- as.numeric(u) # mean-0 white noise with covar=Q^-1
     if(is.infinite(df)) return(u)
     # construct t from u via inverse gamma relationship
-    g <- rgamma(n=1, shape=df/2, rate=df/2)
+    g <- stats::rgamma(n=1, shape=df/2, rate=df/2)
     u/sqrt(g)
   } else if(!is.null(Qinv)) {
     if(is.infinite(df)){
@@ -440,7 +440,8 @@ mymvnorm <- function(inputs, df=Inf){
 #' @details This function extracts correlations without having to
 #'   invert Q using sparse matrix routines. Used for plotting outputs only.
 get_sparse_correlation <- function(Q, i, j) {
-  if(class(Q)!='dsCMatrix')
+
+  if(!is(Q, 'dsCMatrix'))
     stop("This function only works for dsCMatrix objects")
   n <- nrow(Q)
   # Create unit vectors e_i and e_j

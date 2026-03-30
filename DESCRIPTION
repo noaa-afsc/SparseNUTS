@@ -23,11 +23,11 @@ Imports: ellipse,
     Matrix,
     methods,
     StanEstimators,
-    posterior
+    posterior,
+    stats,
+    sparseinv
 Suggests:
     shinystan (>= 2.5.0),
-    matrixcalc (>= 1.0.3),
-    stats,
     knitr,
     TMB,
     RTMB,
@@ -35,6 +35,10 @@ Suggests:
     withr,
     callr,
     future,
+    bayesplot,
+    dplyr,
+    loo,
+    tidyr,
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown

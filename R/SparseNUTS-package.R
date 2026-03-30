@@ -73,6 +73,9 @@
 #' @importFrom methods as is
 #' @importFrom stats cov2cor
 #' @importFrom utils str
+#' @importFrom sparseinv Takahashi_Davis
+#' @importFrom stats rgamma
+#'
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
