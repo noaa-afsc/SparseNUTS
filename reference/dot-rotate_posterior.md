@@ -5,7 +5,7 @@ Update algorithm for mass matrix.
 ## Usage
 
 ``` r
-.rotate_posterior(metric, fn, gr, Q, Qinv, y.cur)
+.rotate_posterior(metric, fn, gr, inputs, y.cur)
 ```
 
 ## Arguments
@@ -22,13 +22,9 @@ Update algorithm for mass matrix.
 
   The current gr function
 
-- Q:
+- inputs:
 
-  The sparse precision matrix
-
-- Qinv:
-
-  The inverse of Q
+  A list of inputs
 
 - y.cur:
 

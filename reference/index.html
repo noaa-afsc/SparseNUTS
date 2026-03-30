@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SparseNUTS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,17 +77,17 @@
 
         <dt>
 
-          <code><a href="dot-get_Q.html">.get_Q()</a></code>
+          <code><a href="dot-get_Q_stats.html">.get_Q_stats()</a></code>
 
         </dt>
-        <dd>Get the joint precision matrix Q from an optimized TMB or RTMB obj.</dd>
+        <dd>Get the joint precision matrix Q from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation. Done using efficient sparse methods, specifically the Takahashi approach implemented in the Takahashi_Davis function in the <span class="pkg">sparseinverse</span> package.</dd>
 
         <dt>
 
-          <code><a href="dot-get_Qinv.html">.get_Qinv()</a></code>
+          <code><a href="dot-get_Qinv_stats.html">.get_Qinv_stats()</a></code>
 
         </dt>
-        <dd>Get the joint covariance Sigma from an optimized TMB or RTMB obj without random effects.</dd>
+        <dd>Get the covariance matrix Qinv from an optimized TMB or RTMB obj, along with the standard errors and lower bound of the absolute maximum correlation.</dd>
 
         <dt>
 
@@ -137,6 +137,13 @@
 
         </dt>
         <dd>Extract posterior samples from a tmbfit object</dd>
+
+        <dt>
+
+          <code><a href="get_sparse_correlation.html">get_sparse_correlation()</a></code>
+
+        </dt>
+        <dd>Extract a single correlation from a sparse precision matrix</dd>
 
         <dt>
 

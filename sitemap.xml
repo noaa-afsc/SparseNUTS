@@ -14,8 +14,8 @@
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/as.tmbfit.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/benchmark_metrics.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/check_snuts_diagnostics.html</loc></url>
-<url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Q.html</loc></url>
-<url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Qinv.html</loc></url>
+<url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Q_stats.html</loc></url>
+<url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Qinv_stats.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_inits.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-make_unique_names.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-print.mat.stats.html</loc></url>
@@ -23,6 +23,7 @@
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/extract_sampler_params.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/extract_samples.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/get_post.html</loc></url>
+<url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/get_sparse_correlation.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/index.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/is.tmbfit.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/launch_shinytmb.html</loc></url>

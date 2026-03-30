@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SparseNUTS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Update algorithm for mass matrix.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/v1.0.0/R/precondition.R" class="external-link"><code>R/precondition.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/main/R/precondition.R" class="external-link"><code>R/precondition.R</code></a></small>
       <div class="d-none name"><code>dot-rotate_posterior.Rd</code></div>
     </div>
 
@@ -45,7 +45,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.rotate_posterior</span><span class="op">(</span><span class="va">metric</span>, <span class="va">fn</span>, <span class="va">gr</span>, <span class="va">Q</span>, <span class="va">Qinv</span>, <span class="va">y.cur</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.rotate_posterior</span><span class="op">(</span><span class="va">metric</span>, <span class="va">fn</span>, <span class="va">gr</span>, <span class="va">inputs</span>, <span class="va">y.cur</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -64,12 +64,8 @@
 <dd><p>The current gr function</p></dd>
 
 
-<dt id="arg-q">Q<a class="anchor" aria-label="anchor" href="#arg-q"></a></dt>
-<dd><p>The sparse precision matrix</p></dd>
-
-
-<dt id="arg-qinv">Qinv<a class="anchor" aria-label="anchor" href="#arg-qinv"></a></dt>
-<dd><p>The inverse of Q</p></dd>
+<dt id="arg-inputs">inputs<a class="anchor" aria-label="anchor" href="#arg-inputs"></a></dt>
+<dd><p>A list of inputs</p></dd>
 
 
 <dt id="arg-y-cur">y.cur<a class="anchor" aria-label="anchor" href="#arg-y-cur"></a></dt>

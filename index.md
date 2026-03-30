@@ -1,8 +1,8 @@
 # SparseNUTS
 
-The goal of SparseNUTS provides an interface for performing Bayesian
-analyses using the no-U-turn (NUTS) MCMC algorithm for TMB and RTMB
-models.
+The goal of SparseNUTS is to provide an interface for performing
+Bayesian analyses using the no-U-turn (NUTS) MCMC algorithm for TMB and
+RTMB models.
 
 SparseNUTS uses the NUTS algorithm in the Stan software as linked
 through the

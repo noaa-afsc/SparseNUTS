@@ -1,8 +1,8 @@
 # SparseNUTS
 
-The goal of SparseNUTS provides an interface for performing Bayesian
-analyses using the no-U-turn (NUTS) MCMC algorithm for TMB and RTMB
-models.
+The goal of SparseNUTS is to provide an interface for performing
+Bayesian analyses using the no-U-turn (NUTS) MCMC algorithm for TMB and
+RTMB models.
 
 SparseNUTS uses the NUTS algorithm in the Stan software as linked
 through the
@@ -99,12 +99,19 @@ In prep.
 - [`check_snuts_diagnostics()`](https://noaa-afsc.github.io/SparseNUTS/reference/check_snuts_diagnostics.md)
   : Check NUTS diagnostics of a fitted model
 
-- [`.get_Q()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Q.md)
-  : Get the joint precision matrix Q from an optimized TMB or RTMB obj.
+- [`.get_Q_stats()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Q_stats.md)
+  :
 
-- [`.get_Qinv()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Qinv.md)
-  : Get the joint covariance Sigma from an optimized TMB or RTMB obj
-  without random effects.
+  Get the joint precision matrix Q from an optimized TMB or RTMB obj,
+  along with the standard errors and lower bound of the absolute maximum
+  correlation. Done using efficient sparse methods, specifically the
+  Takahashi approach implemented in the Takahashi_Davis function in the
+  sparseinverse package.
+
+- [`.get_Qinv_stats()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Qinv_stats.md)
+  : Get the covariance matrix Qinv from an optimized TMB or RTMB obj,
+  along with the standard errors and lower bound of the absolute maximum
+  correlation.
 
 - [`.get_inits()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_inits.md)
   : Get a single initial value vector in untransformed model space
@@ -127,6 +134,9 @@ In prep.
 
 - [`get_post()`](https://noaa-afsc.github.io/SparseNUTS/reference/get_post.md)
   : Extract posterior samples from a tmbfit object
+
+- [`get_sparse_correlation()`](https://noaa-afsc.github.io/SparseNUTS/reference/get_sparse_correlation.md)
+  : Extract a single correlation from a sparse precision matrix
 
 - [`is.tmbfit()`](https://noaa-afsc.github.io/SparseNUTS/reference/is.tmbfit.md)
   : Check object of class tmbfit
