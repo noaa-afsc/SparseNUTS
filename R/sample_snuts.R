@@ -277,7 +277,8 @@ sample_snuts <-
     if(is.null(num_warmup)) num_warmup <- num_samples
     message("Starting MCMC sampling...")
     if(cores>1) message("Preparing parallel workspace...")
-    fit <- StanEstimators::stan_sample(fn=fsparse, par_inits=inits,
+    fit <-tryCatch(
+       StanEstimators::stan_sample(fn=fsparse, par_inits=inits,
                        grad_fun=gsparse, num_samples=num_samples,
                        num_warmup=num_warmup, thin=thin,
                        globals = globals2, packages=packages,
@@ -291,7 +292,18 @@ sample_snuts <-
                        check_diagnostics=FALSE,
                        num_chains = chains, seed = seed,
                        refresh=refresh, lower=lower, upper=upper,
-                       ...)
+                       ...), error=function(e) 'error')
+    if(is.character(fit)){
+      if(isRTMB & is.null(globals) & cores >1){
+        stop("Failed to run parallel chains. Argument 'globals' is empty and RTMB detected. \n  Did you forget to specify global objects needed to execute parallel chains? \n  Try specifying 'globals' or setting cores=1 to more easily diagnose issues")
+      }  else if(isRTMB & cores > 1){
+        stop("Failed to run parallel chains. \n  Did you forget to specify all global objects needed to execute parallel chains? \n  Inspect 'globals' or set cores=1 to more easily diagnose issues.")
+      }  else if(cores>1) {
+        stop("Failed to run chains in parallel. Try setting cores=1 to more easily diagnose issues")
+      } else {
+        stop("Failed to run chains in serial. Investigate model correctness outside of this function.")
+      }
+    }
 
     fit2 <- as.tmbfit(fit, parnames=inputs$parnames, mle=inputs$mle,
                       invf=rotation$finv, metric=rotation$metric,
