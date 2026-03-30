@@ -102,29 +102,29 @@ mcmc <- sample_snuts(obj, chains=1, init='random', seed=1234,
                      refresh=0, skip_optimization=TRUE,
                      Q=Q, Qinv=Sigma)
 #> Getting Q and its stats...
-#> Q is 90.6% sparse | Ratio of marginal SDs=219.3 | Max abs cor >=0.81
+#> Q is 90.81% sparse | Ratio of marginal SDs=219.3 | Max abs cor >=0.81
 #> Rebuilding RTMB obj without random effects...
 #> dense metric selected b/c faster than sparse and high correlation (max=0.81)
-#> log-posterior at inits=(-2626.27); at conditional mode=-2574.481
+#> log-posterior at inits=(-2626.56); at conditional mode=-2574.481
 #> Starting MCMC sampling...
 #> 
 #> 
-#> Gradient evaluation took 0.000201 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 2.01 seconds.
+#> Gradient evaluation took 0.000183 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 1.83 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
 #> 
-#>  Elapsed Time: 0.379 seconds (Warm-up)
-#>                1.754 seconds (Sampling)
-#>                2.133 seconds (Total)
+#>  Elapsed Time: 0.394 seconds (Warm-up)
+#>                2.047 seconds (Sampling)
+#>                2.441 seconds (Total)
 #> 
 #> 
 #> 
 #> Model 'RTMB' has 105 pars, and was fit using NUTS with a 'dense' metric
 #> 1 chain(s) of 1150 total iterations (150 warmup) were used
-#> Average run time per chain was 2.13 seconds 
-#> Minimum ESS=319.5 (31.95%), and maximum Rhat=1.011
+#> Average run time per chain was 2.44 seconds 
+#> Minimum ESS=357.2 (35.72%), and maximum Rhat=1.015
 #> There were 0 divergences after warmup
 post <- as.data.frame(mcmc)
 
@@ -139,7 +139,7 @@ plot_uncertainties(mcmc)
 predWeight <- apply(post,1, \(x) obj$report(x)$predWeight) |> 
   t()
 predWeight |> str()
-#>  num [1:1000, 1:578] 29.5 17.44 9.29 39.18 16.33 ...
+#>  num [1:1000, 1:578] 29.9 24.6 27.3 30.8 20.7 ...
 
 # compare asymptotic vs posterior intervals of first few chicks
 par(mfrow=c(2,3))
@@ -227,18 +227,18 @@ print(loo1)
 #> Computed from 1000 by 578 log-likelihood matrix.
 #> 
 #>          Estimate   SE
-#> elpd_loo  -2350.6 20.0
-#> p_loo        88.2  7.1
-#> looic      4701.2 40.0
+#> elpd_loo  -2350.2 19.6
+#> p_loo        86.8  6.6
+#> looic      4700.4 39.3
 #> ------
 #> MCSE of elpd_loo is NA.
 #> MCSE and ESS estimates assume independent draws (r_eff=1).
 #> 
 #> Pareto k diagnostic values:
 #>                           Count Pct.    Min. ESS
-#> (-Inf, 0.67]   (good)     570   98.6%   79      
-#>    (0.67, 1]   (bad)        7    1.2%   <NA>    
-#>     (1, Inf)   (very bad)   1    0.2%   <NA>    
+#> (-Inf, 0.67]   (good)     569   98.4%   73      
+#>    (0.67, 1]   (bad)        9    1.6%   <NA>    
+#>     (1, Inf)   (very bad)   0    0.0%   <NA>    
 #> See help('pareto-k-diagnostic') for details.
 plot(loo1)
 ```
@@ -263,22 +263,22 @@ mcmc2 <- sample_snuts(obj2, chains=1, seed=1215, refresh=0)
 #> Starting MCMC sampling...
 #> 
 #> 
-#> Gradient evaluation took 0.000223 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 2.23 seconds.
+#> Gradient evaluation took 0.000113 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 1.13 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
 #> 
-#>  Elapsed Time: 0.153 seconds (Warm-up)
-#>                0.814 seconds (Sampling)
-#>                0.967 seconds (Total)
+#>  Elapsed Time: 0.178 seconds (Warm-up)
+#>                0.932 seconds (Sampling)
+#>                1.11 seconds (Total)
 #> Warning: The ESS has been capped to avoid unstable estimates.
 #> Warning: The ESS has been capped to avoid unstable estimates.
 #> 
 #> 
 #> Model 'RTMB' has 53 pars, and was fit using NUTS with a 'diag' metric
 #> 1 chain(s) of 1150 total iterations (150 warmup) were used
-#> Average run time per chain was 0.97 seconds 
+#> Average run time per chain was 1.11 seconds 
 #> Minimum ESS=367.1 (36.71%), and maximum Rhat=1.01
 #> There were 0 divergences after warmup
 post2 <- as.data.frame(mcmc2)
@@ -307,7 +307,7 @@ print(loo2)
 loo_compare(loo1, loo2)
 #>        elpd_diff se_diff
 #> model1    0.0       0.0 
-#> model2 -262.5      19.3
+#> model2 -262.9      19.0
 ```
 
 ## Advanced features
@@ -332,29 +332,29 @@ adapted1 <- sample_snuts(obj, chains=1, seed=1234, refresh=0,
                         skip_optimization=TRUE, Q=Q, Qinv=Sigma,
                         metric='auto', adapt_stan_metric = TRUE)
 #> Getting Q and its stats...
-#> Q is 90.6% sparse | Ratio of marginal SDs=219.3 | Max abs cor >=0.81
+#> Q is 90.81% sparse | Ratio of marginal SDs=219.3 | Max abs cor >=0.81
 #> Rebuilding RTMB obj without random effects...
 #> dense metric selected b/c faster than sparse and high correlation (max=0.81)
 #> log-posterior at inits=(-2574.48); at conditional mode=-2574.481
 #> Starting MCMC sampling...
 #> 
 #> 
-#> Gradient evaluation took 0.000186 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 1.86 seconds.
+#> Gradient evaluation took 0.000187 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 1.87 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
 #> 
-#>  Elapsed Time: 2.597 seconds (Warm-up)
-#>                2.177 seconds (Sampling)
-#>                4.774 seconds (Total)
+#>  Elapsed Time: 2.497 seconds (Warm-up)
+#>                3.195 seconds (Sampling)
+#>                5.692 seconds (Total)
 #> 
 #> 
 #> 
 #> Model 'RTMB' has 105 pars, and was fit using NUTS with a 'dense' metric
 #> 1 chain(s) of 2000 total iterations (1000 warmup) were used
-#> Average run time per chain was 4.77 seconds 
-#> Minimum ESS=279.7 (27.97%), and maximum Rhat=1.012
+#> Average run time per chain was 5.69 seconds 
+#> Minimum ESS=334.6 (33.46%), and maximum Rhat=1.012
 #> There were 0 divergences after warmup
 adapted2 <- sample_snuts(obj, chains=1, seed=1234, refresh=0,
                      skip_optimization=TRUE, Q=Q, Qinv=Sigma,
@@ -364,23 +364,22 @@ adapted2 <- sample_snuts(obj, chains=1, seed=1234, refresh=0,
 #> Starting MCMC sampling...
 #> 
 #> 
-#> Gradient evaluation took 0.000123 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 1.23 seconds.
+#> Gradient evaluation took 0.000162 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 1.62 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
 #> 
-#>  Elapsed Time: 10.661 seconds (Warm-up)
-#>                3.941 seconds (Sampling)
-#>                14.602 seconds (Total)
-#> Warning: The ESS has been capped to avoid unstable estimates.
-#> Warning: The ESS has been capped to avoid unstable estimates.
+#>  Elapsed Time: 11.946 seconds (Warm-up)
+#>                4.208 seconds (Sampling)
+#>                16.154 seconds (Total)
+#> 
 #> 
 #> 
 #> Model 'RTMB' has 105 pars, and was fit using NUTS with a 'stan' metric
 #> 1 chain(s) of 2000 total iterations (1000 warmup) were used
-#> Average run time per chain was 14.6 seconds 
-#> Minimum ESS=328.4 (32.84%), and maximum Rhat=1.015
+#> Average run time per chain was 16.15 seconds 
+#> Minimum ESS=368.7 (36.87%), and maximum Rhat=1.023
 #> There were 0 divergences after warmup
 sp1 <- extract_sampler_params(mcmc, inc_warmup = TRUE) |>
   subset(iteration <= 1050) |> 
@@ -433,22 +432,22 @@ ela <- sample_snuts(obj, chains=1, laplace=TRUE, refresh=0)
 #> Starting MCMC sampling...
 #> 
 #> 
-#> Gradient evaluation took 0.000669 seconds
-#> 1000 transitions using 10 leapfrog steps per transition would take 6.69 seconds.
+#> Gradient evaluation took 0.000851 seconds
+#> 1000 transitions using 10 leapfrog steps per transition would take 8.51 seconds.
 #> Adjust your expectations accordingly!
 #> 
 #> 
 #> 
-#>  Elapsed Time: 1.017 seconds (Warm-up)
-#>                6.386 seconds (Sampling)
-#>                7.403 seconds (Total)
+#>  Elapsed Time: 1.139 seconds (Warm-up)
+#>                6.626 seconds (Sampling)
+#>                7.765 seconds (Total)
 #> 
 #> 
 #> 
 #> Model 'RTMB' has 5 pars, and was fit using NUTS with a 'diag' metric
 #> 1 chain(s) of 1150 total iterations (150 warmup) were used
-#> Average run time per chain was 7.4 seconds 
-#> Minimum ESS=554.9 (55.49%), and maximum Rhat=1.01
+#> Average run time per chain was 7.77 seconds 
+#> Minimum ESS=595.5 (59.55%), and maximum Rhat=1.001
 #> There were 0 divergences after warmup
 ```
 
@@ -487,35 +486,35 @@ fit <- sample_snuts(obj, seed=1213, refresh=0, init='random')
 #> log-posterior at inits=(-237.12,-23.12,-37.52,-20.55); at conditional mode=-10.288
 #> Starting MCMC sampling...
 #> Preparing parallel workspace...
-#> Chain 1: Gradient evaluation took 0.00019 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.9 seconds.
+#> Chain 1: Gradient evaluation took 0.000174 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.74 seconds.
 #> Chain 1: Adjust your expectations accordingly!
-#> Chain 2: Gradient evaluation took 0.000175 seconds
-#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.75 seconds.
+#> Chain 2: Gradient evaluation took 0.000177 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.77 seconds.
 #> Chain 2: Adjust your expectations accordingly!
-#> Chain 3: Gradient evaluation took 0.00017 seconds
-#> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 1.7 seconds.
+#> Chain 3: Gradient evaluation took 0.000166 seconds
+#> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 1.66 seconds.
 #> Chain 3: Adjust your expectations accordingly!
-#> Chain 4: Gradient evaluation took 0.000185 seconds
-#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 1.85 seconds.
+#> Chain 4: Gradient evaluation took 0.000184 seconds
+#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 1.84 seconds.
 #> Chain 4: Adjust your expectations accordingly!
-#> Chain 1:  Elapsed Time: 2.733 seconds (Warm-up)
-#> Chain 1:                6.314 seconds (Sampling)
-#> Chain 1:                9.047 seconds (Total)
-#> Chain 4:  Elapsed Time: 0.879 seconds (Warm-up)
-#> Chain 4:                10.038 seconds (Sampling)
-#> Chain 4:                10.917 seconds (Total)
-#> Chain 3:  Elapsed Time: 3.689 seconds (Warm-up)
-#> Chain 3:                8.985 seconds (Sampling)
-#> Chain 3:                12.674 seconds (Total)
-#> Chain 2:  Elapsed Time: 6.422 seconds (Warm-up)
-#> Chain 2:                12.264 seconds (Sampling)
-#> Chain 2:                18.686 seconds (Total)
+#> Chain 1:  Elapsed Time: 3.095 seconds (Warm-up)
+#> Chain 1:                6.304 seconds (Sampling)
+#> Chain 1:                9.399 seconds (Total)
+#> Chain 4:  Elapsed Time: 0.978 seconds (Warm-up)
+#> Chain 4:                10.723 seconds (Sampling)
+#> Chain 4:                11.701 seconds (Total)
+#> Chain 3:  Elapsed Time: 3.901 seconds (Warm-up)
+#> Chain 3:                9.83 seconds (Sampling)
+#> Chain 3:                13.731 seconds (Total)
+#> Chain 2:  Elapsed Time: 6.332 seconds (Warm-up)
+#> Chain 2:                12.595 seconds (Sampling)
+#> Chain 2:                18.927 seconds (Total)
 #> 
 #> 
 #> Model 'RTMB' has 10 pars, and was fit using NUTS with a 'diag' metric
 #> 4 chain(s) of 1150 total iterations (150 warmup) were used
-#> Average run time per chain was 12.83 seconds 
+#> Average run time per chain was 13.44 seconds 
 #> Minimum ESS=89.5 (2.24%), and maximum Rhat=1.036
 #> !! Warning: Signs of non-convergence found. Do not use for inference !!
 #> There were 0 divergences after warmup
@@ -544,35 +543,35 @@ fit.ela <- sample_snuts(obj, laplace=TRUE, refresh=0, init='random', seed=12312)
 #> log-posterior at inits=(-2.68,-2.25,-2.1,-2.08); at conditional mode=-2.018
 #> Starting MCMC sampling...
 #> Preparing parallel workspace...
-#> Chain 1: Gradient evaluation took 0.03027 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 302.7 seconds.
+#> Chain 1: Gradient evaluation took 0.045681 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 456.81 seconds.
 #> Chain 1: Adjust your expectations accordingly!
-#> Chain 2: Gradient evaluation took 0.046978 seconds
-#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 469.78 seconds.
+#> Chain 2: Gradient evaluation took 0.031026 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 310.26 seconds.
 #> Chain 2: Adjust your expectations accordingly!
-#> Chain 3: Gradient evaluation took 0.031465 seconds
-#> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 314.65 seconds.
+#> Chain 3: Gradient evaluation took 0.042664 seconds
+#> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 426.64 seconds.
 #> Chain 3: Adjust your expectations accordingly!
-#> Chain 4: Gradient evaluation took 0.0306 seconds
-#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 306 seconds.
+#> Chain 4: Gradient evaluation took 0.03072 seconds
+#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 307.2 seconds.
 #> Chain 4: Adjust your expectations accordingly!
-#> Chain 2:  Elapsed Time: 0.441 seconds (Warm-up)
-#> Chain 2:                3.306 seconds (Sampling)
-#> Chain 2:                3.747 seconds (Total)
-#> Chain 3:  Elapsed Time: 0.496 seconds (Warm-up)
-#> Chain 3:                3.171 seconds (Sampling)
-#> Chain 3:                3.667 seconds (Total)
-#> Chain 1:  Elapsed Time: 0.822 seconds (Warm-up)
-#> Chain 1:                3.194 seconds (Sampling)
-#> Chain 1:                4.016 seconds (Total)
-#> Chain 4:  Elapsed Time: 0.56 seconds (Warm-up)
-#> Chain 4:                3.051 seconds (Sampling)
-#> Chain 4:                3.611 seconds (Total)
+#> Chain 1:  Elapsed Time: 0.546 seconds (Warm-up)
+#> Chain 1:                3.664 seconds (Sampling)
+#> Chain 1:                4.21 seconds (Total)
+#> Chain 2:  Elapsed Time: 0.575 seconds (Warm-up)
+#> Chain 2:                3.461 seconds (Sampling)
+#> Chain 2:                4.036 seconds (Total)
+#> Chain 3:  Elapsed Time: 0.548 seconds (Warm-up)
+#> Chain 3:                3.155 seconds (Sampling)
+#> Chain 3:                3.703 seconds (Total)
+#> Chain 4:  Elapsed Time: 0.586 seconds (Warm-up)
+#> Chain 4:                3.27 seconds (Sampling)
+#> Chain 4:                3.856 seconds (Total)
 #> 
 #> 
 #> Model 'RTMB' has 1 pars, and was fit using NUTS with a 'diag' metric
 #> 4 chain(s) of 1150 total iterations (150 warmup) were used
-#> Average run time per chain was 3.76 seconds 
+#> Average run time per chain was 3.95 seconds 
 #> Minimum ESS=1705.7 (42.64%), and maximum Rhat=1.001
 #> There were 0 divergences after warmup
 # you just get the prior back b/c the Laplace approximation is
@@ -610,21 +609,21 @@ pf <- StanEstimators::stan_pathfinder(fn=fn, grad_fun=grad_fun, refresh=100,
 #> 
 #> Path [1] :Initial log joint density = -10.287998
 #> Path [1] : Iter      log prob        ||dx||      ||grad||     alpha      alpha0      # evals       ELBO    Best ELBO        Notes 
-#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -3.853e+01 -8.331e+19                  
-#> Path [1] :Best Iter: [1] ELBO (-38.528633) evaluations: (62)
+#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -3.180e+01 -9.020e+21                  
+#> Path [1] :Best Iter: [1] ELBO (-31.798515) evaluations: (62)
 #> Path [2] :Initial log joint density = -10.287998
 #> Path [2] : Iter      log prob        ||dx||      ||grad||     alpha      alpha0      # evals       ELBO    Best ELBO        Notes 
-#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -3.719e+01 -1.047e+20                  
-#> Path [2] :Best Iter: [1] ELBO (-37.191603) evaluations: (62)
+#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -3.555e+01 -5.264e+20                  
+#> Path [2] :Best Iter: [1] ELBO (-35.550786) evaluations: (62)
 #> Path [3] :Initial log joint density = -10.287998
 #> Path [3] : Iter      log prob        ||dx||      ||grad||     alpha      alpha0      # evals       ELBO    Best ELBO        Notes 
-#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -4.621e+01 -1.173e+21                  
-#> Path [3] :Best Iter: [1] ELBO (-46.207949) evaluations: (62)
+#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -3.406e+01 -2.685e+20                  
+#> Path [3] :Best Iter: [1] ELBO (-34.059561) evaluations: (62)
 #> Path [4] :Initial log joint density = -10.287998
 #> Path [4] : Iter      log prob        ||dx||      ||grad||     alpha      alpha0      # evals       ELBO    Best ELBO        Notes 
-#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -3.578e+01 -4.064e+20                  
-#> Path [4] :Best Iter: [1] ELBO (-35.784986) evaluations: (62)
-#> Pareto k value (1.8) is greater than 0.7. Importance resampling was not able to improve the approximation, which may indicate that the approximation itself is poor.
+#>               2       8.084e+01      3.600e+01   1.776e-15    1.000e+00  1.000e+00        62 -4.324e+01 -9.054e+20                  
+#> Path [4] :Best Iter: [1] ELBO (-43.239919) evaluations: (62)
+#> Pareto k value (1.7) is greater than 0.7. Importance resampling was not able to improve the approximation, which may indicate that the approximation itself is poor.
 ```
 
 ### Linking to other Bayesian tools

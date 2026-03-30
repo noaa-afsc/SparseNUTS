@@ -68,7 +68,7 @@
 Monnahan</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/main/vignettes/SparseNUTS.Rmd" class="external-link"><code>vignettes/SparseNUTS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/v1.0.1/vignettes/SparseNUTS.Rmd" class="external-link"><code>vignettes/SparseNUTS.Rmd</code></a></small>
       <div class="d-none name"><code>SparseNUTS.Rmd</code></div>
     </div>
 
@@ -186,22 +186,22 @@ function as follows:</p>
 <pre><code><span><span class="co">## Starting MCMC sampling...</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Gradient evaluation took 7.6e-05 seconds</span></span>
-<span><span class="co">## 1000 transitions using 10 leapfrog steps per transition would take 0.76 seconds.</span></span>
+<span><span class="co">## Gradient evaluation took 8.7e-05 seconds</span></span>
+<span><span class="co">## 1000 transitions using 10 leapfrog steps per transition would take 0.87 seconds.</span></span>
 <span><span class="co">## Adjust your expectations accordingly!</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##  Elapsed Time: 0.097 seconds (Warm-up)</span></span>
-<span><span class="co">##                0.568 seconds (Sampling)</span></span>
-<span><span class="co">##                0.665 seconds (Total)</span></span>
+<span><span class="co">##  Elapsed Time: 0.104 seconds (Warm-up)</span></span>
+<span><span class="co">##                0.56 seconds (Sampling)</span></span>
+<span><span class="co">##                0.664 seconds (Total)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Model 'schools' has 10 pars, and was fit using NUTS with a 'dense' metric</span></span>
 <span><span class="co">## 1 chain(s) of 1150 total iterations (150 warmup) were used</span></span>
 <span><span class="co">## Average run time per chain was 0.66 seconds </span></span>
-<span><span class="co">## Minimum ESS=218.9 (21.89%), and maximum Rhat=1.007</span></span>
+<span><span class="co">## Minimum ESS=228 (22.8%), and maximum Rhat=1.008</span></span>
 <span><span class="co">## There were 0 divergences after warmup</span></span></code></pre>
 <p>The returned object <code>fit</code> (an object of ‘adfit’ S3 class)
 contains the posterior samples and other relevant information for a
@@ -289,21 +289,21 @@ can be accessed in more depth via the <code>monitor</code> slot:</p>
 <pre><code><span><span class="co">## Model 'schools' has 10 pars, and was fit using NUTS with a 'dense' metric</span></span>
 <span><span class="co">## 1 chain(s) of 1150 total iterations (150 warmup) were used</span></span>
 <span><span class="co">## Average run time per chain was 0.66 seconds </span></span>
-<span><span class="co">## Minimum ESS=218.9 (21.89%), and maximum Rhat=1.007</span></span>
+<span><span class="co">## Minimum ESS=228 (22.8%), and maximum Rhat=1.008</span></span>
 <span><span class="co">## There were 0 divergences after warmup</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">monitor</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## drws_smm [11 × 10] (S3: draws_summary/tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">##  $ variable: chr [1:11] "mu" "logtau" "eta[1]" "eta[2]" ...</span></span>
-<span><span class="co">##  $ mean    : num [1:11] 7.8433 1.4253 0.3923 -0.0431 -0.1782 ...</span></span>
-<span><span class="co">##  $ median  : num [1:11] 7.98 1.6921 0.456 -0.0264 -0.1647 ...</span></span>
-<span><span class="co">##  $ sd      : num [1:11] 5.103 1.164 0.926 0.873 0.926 ...</span></span>
-<span><span class="co">##  $ mad     : num [1:11] 4.569 0.996 0.893 0.817 0.816 ...</span></span>
-<span><span class="co">##  $ q5      : num [1:11] -0.315 -0.586 -1.14 -1.501 -1.648 ...</span></span>
-<span><span class="co">##  $ q95     : num [1:11] 16.46 2.89 1.82 1.36 1.39 ...</span></span>
-<span><span class="co">##  $ rhat    : num [1:11] 0.999 1.002 1 1.004 1.003 ...</span></span>
-<span><span class="co">##  $ ess_bulk: num [1:11] 803 272 1447 1157 1179 ...</span></span>
-<span><span class="co">##  $ ess_tail: num [1:11] 537 334 743 551 606 ...</span></span>
+<span><span class="co">##  $ mean    : num [1:11] 7.8435 1.3839 0.3962 0.0152 -0.2098 ...</span></span>
+<span><span class="co">##  $ median  : num [1:11] 7.82111 1.5771 0.35881 0.00727 -0.18936 ...</span></span>
+<span><span class="co">##  $ sd      : num [1:11] 4.789 1.138 0.943 0.841 0.928 ...</span></span>
+<span><span class="co">##  $ mad     : num [1:11] 4.671 0.928 0.889 0.833 0.947 ...</span></span>
+<span><span class="co">##  $ q5      : num [1:11] 0.0166 -0.8015 -1.2217 -1.354 -1.7025 ...</span></span>
+<span><span class="co">##  $ q95     : num [1:11] 15.73 2.78 1.89 1.4 1.32 ...</span></span>
+<span><span class="co">##  $ rhat    : num [1:11] 1 1.01 1 1 1.01 ...</span></span>
+<span><span class="co">##  $ ess_bulk: num [1:11] 726 228 1469 1903 1548 ...</span></span>
+<span><span class="co">##  $ ess_tail: num [1:11] 451 140 609 820 769 ...</span></span>
 <span><span class="co">##  - attr(*, "num_args")= list()</span></span></code></pre>
 <p>A specialized <code>pairs</code> plotting function is available
 (formally called <code>pairs_admb</code>) to examine pair-wise behavior
@@ -332,12 +332,12 @@ NUTS trajectories.</p>
 <pre><code><span><span class="co">## 'data.frame':    1000 obs. of  8 variables:</span></span>
 <span><span class="co">##  $ chain        : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co">##  $ iteration    : num  151 152 153 154 155 156 157 158 159 160 ...</span></span>
-<span><span class="co">##  $ accept_stat__: num  0.962 0.975 0.949 0.714 0.983 ...</span></span>
-<span><span class="co">##  $ stepsize__   : num  0.542 0.542 0.542 0.542 0.542 ...</span></span>
-<span><span class="co">##  $ treedepth__  : num  3 3 3 2 3 3 3 3 3 3 ...</span></span>
+<span><span class="co">##  $ accept_stat__: num  1 0.99 0.957 0.956 0.766 ...</span></span>
+<span><span class="co">##  $ stepsize__   : num  0.546 0.546 0.546 0.546 0.546 ...</span></span>
+<span><span class="co">##  $ treedepth__  : num  3 3 3 3 3 2 3 3 2 3 ...</span></span>
 <span><span class="co">##  $ n_leapfrog__ : num  7 7 7 7 7 7 7 7 7 7 ...</span></span>
 <span><span class="co">##  $ divergent__  : num  0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">##  $ energy__     : num  44.1 44.3 45.1 41.4 38.2 ...</span></span></code></pre>
+<span><span class="co">##  $ energy__     : num  42.4 39.4 38 38.1 39.2 ...</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## or plot them directly</span></span>
 <span><span class="fu"><a href="../reference/plot_sampler_params.html">plot_sampler_params</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
@@ -362,22 +362,22 @@ this for the quantity theta (a vector of length 8).</p>
 <code class="sourceCode R"><span><span class="va">post</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="va">post</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 'data.frame':    1000 obs. of  10 variables:</span></span>
-<span><span class="co">##  $ mu    : num  13.934 0.563 12.427 8.138 7.693 ...</span></span>
-<span><span class="co">##  $ logtau: num  1.902 1.225 0.395 1.336 2.733 ...</span></span>
-<span><span class="co">##  $ eta[1]: num  0.722 -0.678 1.568 0.612 0.511 ...</span></span>
-<span><span class="co">##  $ eta[2]: num  -1.0022 -0.7282 0.2514 0.1732 -0.0672 ...</span></span>
-<span><span class="co">##  $ eta[3]: num  -1.379 -0.486 -0.601 -0.839 -0.089 ...</span></span>
-<span><span class="co">##  $ eta[4]: num  -0.648 1.611 1.142 0.641 -0.49 ...</span></span>
-<span><span class="co">##  $ eta[5]: num  0.0266 -0.4477 0.6343 0.3218 -0.9412 ...</span></span>
-<span><span class="co">##  $ eta[6]: num  -1.082287 -0.471354 -0.868119 -0.68205 -0.000138 ...</span></span>
-<span><span class="co">##  $ eta[7]: num  1.134 0.797 -0.743 -0.347 1.021 ...</span></span>
-<span><span class="co">##  $ eta[8]: num  -1.387 1.281 -0.73 -0.239 0.603 ...</span></span></code></pre>
+<span><span class="co">##  $ mu    : num  8.95 5.01 12.42 7.61 6.61 ...</span></span>
+<span><span class="co">##  $ logtau: num  1.09 2.28 2.16 2.58 2.49 ...</span></span>
+<span><span class="co">##  $ eta[1]: num  0.0798 0.4155 0.8629 1.3669 0.7933 ...</span></span>
+<span><span class="co">##  $ eta[2]: num  0.9508 0.3968 0.068 0.5814 -0.0797 ...</span></span>
+<span><span class="co">##  $ eta[3]: num  -0.8282 -0.1112 -0.1023 -0.0678 1.045 ...</span></span>
+<span><span class="co">##  $ eta[4]: num  0.135 -0.736 -0.698 -0.603 1.193 ...</span></span>
+<span><span class="co">##  $ eta[5]: num  -2.223 0.257 -1.085 -0.706 -0.785 ...</span></span>
+<span><span class="co">##  $ eta[6]: num  -0.3972 -0.2393 0.0812 -0.3512 0.4687 ...</span></span>
+<span><span class="co">##  $ eta[7]: num  -0.201 0.009 0.905 0.433 0.265 ...</span></span>
+<span><span class="co">##  $ eta[8]: num  -0.567 0.2 0.312 -0.527 0.6 ...</span></span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## now get a generated quantity, here theta which is a vector of</span></span>
 <span><span class="co">## length 8 so becomes a matrix of posterior samples</span></span>
 <span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">post</span>,<span class="fl">1</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">obj</span><span class="op">$</span><span class="fu">report</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">theta</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">theta</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##  num [1:1000, 1:8] 18.77 -1.75 14.76 10.47 15.56 ...</span></span></code></pre>
+<pre><code><span><span class="co">##  num [1:1000, 1:8] 9.18 9.06 19.92 25.6 16.2 ...</span></span></code></pre>
 <p>Likewise, marginal distributions can be explored visually and
 compared to the approximate estimate from the conditional mode and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>
