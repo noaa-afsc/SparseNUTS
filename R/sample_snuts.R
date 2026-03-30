@@ -207,10 +207,11 @@ sample_snuts <-
     # build new joint object here so can test initial values next
     mydll <- unclass(getLoadedDLLs()[[obj$env$DLL]])$path
     isRTMB <- ifelse(obj$env$DLL=='RTMB', TRUE, FALSE)
+    hasRE <- length(obj$env$random)>0
     if(!isRTMB){
       packages <- c("TMB", "Matrix")
       obj2 <- obj
-      if(!laplace){
+      if(!laplace & hasRE){
         message("Rebuilding TMB obj without random effects...")
         obj2 <- TMB::MakeADFun(data=obj$env$data, parameters=obj$env$parList(),
                                map=obj$env$map,
@@ -220,7 +221,7 @@ sample_snuts <-
     } else {
       packages <- c("RTMB", "Matrix")
       obj2 <- obj
-      if(!laplace){
+      if(!laplace & hasRE){
         message("Rebuilding RTMB obj without random effects...")
         obj2 <- RTMB::MakeADFun(func=obj$env$data, parameters=obj$env$parList(),
                                 map=obj$env$map,
@@ -312,6 +313,7 @@ sample_snuts <-
     fit2$time.opt <- inputs$time.opt
     fit2$inits <- yinits
     fit2$condition.factor <- inputs$condition.factor
+    fit2$opt <- inputs$opt
      cat('\n\n')
     if(print) print(fit2)
     return(invisible(fit2))

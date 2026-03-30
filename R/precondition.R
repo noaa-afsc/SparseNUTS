@@ -27,17 +27,34 @@
                 laplace=laplace, metric=metric)
     return(out)
   }
-  if(!skip_optimization){
-    message("Optimizing...")
-    time.opt <-
-      as.numeric(system.time(opt <- with(obj, nlminb(par, fn, gr)))[3])
-  }
+
   hasRE <-  !is.null(obj$env$random)
   if(laplace & !hasRE)
     stop("No random effects found so laplace=TRUE fails, set to FALSE")
   if( (laplace | !hasRE) & metric=='sparse')
     stop("sparse metric only allowed with random effects
            and laplace=FALSE")
+
+  if(!skip_optimization){
+    nfe <- length(obj$par)
+    nre <- length(obj$env$last.par.best)-nfe
+    message("Optimizing marginal posterior with ", nfe, " fixed effects and ", nre, " random effects...")
+    if(any(as.numeric(obj$gr(obj$par))==0))
+      warning('Some gradients were identically 0 at initial optimization values. Typically this indicates a misspecified model. Investigate model structure and retry.')
+    time.opt <-
+      as.numeric(system.time(opt <- tryCatch(with(obj, nlminb(par, fn, gr)), error=function(e) 'error'))[3])
+    if(is.character(opt))
+      stop("Optimization failed. Try optimizing externally (potentially with TMBhelper::fit_tmb) and then setting 'skip_optimization=TRUE'.  Or specify 'metric='stan'' to bypass optimization altogether if no marginal mode is expected.")
+ if(opt$convergence !=0) warning("Optimization convergence code indicated failed convergence")
+    maxgrad <- max(abs(obj$gr(opt$par)))
+    opt$maxgrad <- maxgrad
+    if(maxgrad>.1)
+      warning("Maximum absolute marginal gradient is large (", sprintf('%.3e', maxgrad), ") which may indicate Q is unreliable")
+  } else {
+     opt <- NULL
+   }
+
+
   if(hasRE & !laplace){
     ## Make parameter names unique if vectors exist
     message("Getting Q and its stats...")
@@ -83,7 +100,7 @@
   out <- list(mle=mle, time.opt=time.opt,
               time.Qinv=time.Qinv, time.Q=time.Q, parnames=parnames,
               laplace=laplace, metric=metric, max_cor=stats$max_cor,
-              condition.factor=stats$condition.factor)
+              condition.factor=stats$condition.factor, opt=opt)
   return(out)
 }
 

@@ -3,6 +3,7 @@
 test_that("all metrics work", {
  skip_if(skip_RTMB)
   obj <- get_rtmb_obj()
+  opt <- with(obj, nlminb(par,fn,gr))
   Q <- sdreport(obj, getJointPrecision = TRUE)$jointPrecision
   M <- as.matrix(solve(Q))
   fits <- list()
@@ -10,7 +11,7 @@ test_that("all metrics work", {
     suppressWarnings(suppressMessages(fits[[m]] <-
                 sample_snuts(obj, num_samples=850,
                              num_warmup=150,
-                             skip_optimization = TRUE,
+                             skip_optimization=TRUE,
                              Q=Q, Qinv=M,
                              refresh=0,
                              cores=1, chains=1, seed=1,
@@ -21,9 +22,9 @@ test_that("all metrics work", {
   expect_equal(out$dense,-0.2266874, tolerance=1e-5)
   expect_equal(out$sparse,-0.2266874, tolerance=1e-5)
   # for some reason this one matches locally, but fails during testing???
-  #expect_equal(out$diag, 0.2036309, tolerance=1e-5)
-  expect_equal(out$unit, 1.43051, tolerance=1e-5)
-  expect_equal(out$stan, 0.7801824, tolerance=1e-5)
+  expect_equal(out$diag, 0.5021392, tolerance=1e-5)
+  expect_equal(out$unit, 0.9733782, tolerance=1e-5)
+  expect_equal(out$stan, -0.7514539, tolerance=1e-5)
   expect_equal(out$`sparse-naive`, -0.2266874, tolerance=1e-5)
 })
 
@@ -48,7 +49,7 @@ test_that("parallel works", {
   fit <- sample_snuts(obj, num_samples=800, num_warmup=200, cores=4,
                            refresh=0, print=FALSE, adapt_stan_metric = TRUE,
                            chains=4, seed=1, metric='sparse')
-  expect_equal(sum(tail(as.data.frame(fit),1)),  0.6758557, tolerance = 1e-5)
+  expect_equal(sum(tail(as.data.frame(fit),1)),  -1.116007, tolerance = 1e-5)
 })
 
 
@@ -83,6 +84,7 @@ test_that("random inits work", {
     for(init in c('last.par.best', 'random', 'random-t', 'unif')){
       suppressMessages(tmpfit <- sample_snuts(obj, num_samples=50, num_warmup=200, cores=1,
                                   chains=1, seed=seed, metric='sparse',
+                                  skip_optimization=TRUE,
                                   init=init, refresh=0, Q=Q, Qinv=Qinv, print=FALSE,
                                   control=list(max_treedepth=1, adapt_delta=.99)))
       out <- data.frame(init=init, seed=seed, iter=1:250,
@@ -221,7 +223,7 @@ test_that("metrics are robust to model type",{
   ## should work
   suppressWarnings(fit4 <- sample_snuts(obj, num_samples=800, refresh=0,
                                         num_warmup=200, cores=1, chains=1, seed=1,
-                                        metric='unit', print=FALSE))
+                                        metric='stan', print=FALSE))
   expect_equal(ncol(as.data.frame(fit4)),118)
 
   ## should work if variance term is turned off (penalized ML)
@@ -229,9 +231,9 @@ test_that("metrics are robust to model type",{
                          map=list(logsdu=factor(NA)),
                          random=NULL, silent=TRUE,
                          DLL=obj$env$DLL)
-  suppressWarnings(fit6 <- sample_snuts(obj2, num_samples=800, refresh=0,
-                                        num_warmup=200, cores=1, chains=1, seed=1,
-                                        metric='dense', print=FALSE))
+  fit6 <- sample_snuts(obj2, num_samples=800, refresh=0,
+                                        num_warmup=100, cores=1, chains=1, seed=1,
+                                        metric='dense', print=FALSE)
   expect_equal(ncol(as.data.frame(fit6)), 117)
 })
 

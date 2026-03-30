@@ -23,8 +23,8 @@ if(!skip_TMB){
 if(!skip_RTMB){
   get_rtmb_obj <- function(){
     #library(RTMB)
-    # dummy model for testing
-    pars <- list(x1=0,x2=0,x3=0, xvec=c(1,1))
+    # dummy model for testing, tiny vals so not starting at mode
+    pars <- list(x1=.123,x2=-.343,x3=1.89, xvec=c(1,1))
     f <- function(pars) {
       Sigma <- matrix(c(1,.8,.8,1), nrow=2)
       nll <- -RTMB::dmvnorm(pars$xvec, Sigma=Sigma, log=TRUE) +
