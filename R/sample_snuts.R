@@ -292,8 +292,8 @@ sample_snuts <-
                        parallel_chains=cores, save_warmup=TRUE,
                        check_diagnostics=FALSE,
                        num_chains = chains, seed = seed,
-                       refresh=refresh, lower=lower, upper=upper,
-                       ...), error=function(e) 'error')
+                       refresh=refresh, lower=lower, upper=upper),
+       error=function(e) 'error')
     if(is.character(fit)){
       if(isRTMB & is.null(globals) & cores >1){
         stop("Failed to run parallel chains. Argument 'globals' is empty and RTMB detected. \n  Did you forget to specify global objects needed to execute parallel chains? \n  Try specifying 'globals' or setting cores=1 to more easily diagnose issues")
