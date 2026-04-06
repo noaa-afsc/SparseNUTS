@@ -226,11 +226,11 @@ ggplot(sp, aes(x=iteration, y=stepsize__, color=type)) + geom_line() +
 
 It is apparent that during the first warmup phase the model with Stan defaults ('adapted' in the above plot) has a large adjustment in stepsize and this corresponds to very long trajectory lengths and thus increased computational time. If descaled using $Q$ the adaptation does nothing ('descaled + adapted'), which is why such a short warmup period can be used with SNUTS ('descaled + not adapted') in this case, and often which is why the default warmup is short and adaptation disabled for SNUTS.
 
-In other cases a longer warmup and mass matrix adaptation will make a difference, see for example the 'wildf' model in @monnahan2025.
+In other cases a longer warmup and mass matrix adaptation will make a difference, see for example the 'wildf' model in @monnahan2026.
 
 ### Embedded Laplace approximation SNUTS
 
-This approach uses NUTS (or SNUTS) to sample from the marginal posterior using the Laplace approximation to integrate the random effects. This was first explored in [@monnahan2018] and later in more detail in [@margossian2020] who called it the 'embedded Laplace approximation'. [@monnahan2025] applied this to a much larger set of models and found mixed results.
+This approach uses NUTS (or SNUTS) to sample from the marginal posterior using the Laplace approximation to integrate the random effects. This was first explored in [@monnahan2018] and later in more detail in [@margossian2020] who called it the 'embedded Laplace approximation'. [@monnahan2026] applied this to a much larger set of models and found mixed results.
 
 It is trivial to try in SNUTS by simply declaring `laplace=TRUE`.
 

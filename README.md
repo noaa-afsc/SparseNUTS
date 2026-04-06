@@ -15,7 +15,7 @@ SparseNUTS uses the NUTS algorithm in the Stan software as linked
 through the
 [StanEstimators](https://github.com/andrjohns/StanEstimators) R package.
 SparseNUTS implements the sparse NUTS (SNUTS) algorithm of Monnahan et
-al. (in prep) by decorrelating and descaling the posterior distribution
+al. (2026) by decorrelating and descaling the posterior distribution
 prior to passing to Stan. For models with high correlations and sparse
 precision matrices, SNUTS can substantially improve sampling efficiency
 and thus reduce run times. It also allows easy comparisons between
@@ -84,6 +84,6 @@ commercial product or activity by DOC or the United States Government.
 
 ## References
 
-Monnahan, C.C., Kristensen, K., Thorson, J.T., Carpenter, B. Leveraging
-sparsity to improve no-U-turn sampling for Bayesian hierarchical models.
-In prep.
+Monnahan, C. C., Kristensen, K., Thorson, J. T., & Carpenter, B. (2026).
+Leveraging Sparsity to Improve No-U-Turn Sampling Efficiency for
+Hierarchical Bayesian Models. arXiv preprint arXiv:2603.02437.

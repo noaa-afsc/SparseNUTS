@@ -16,12 +16,12 @@ editor_options:
     wrap: 72
 ---
 
-The goal of SparseNUTS is to provide a user-friendly workflow for users of TMB and RTMB who want to implement the sparse no-u-turn sampler [@monnahan2025] to draw samples from a model.
+The goal of SparseNUTS is to provide a user-friendly workflow for users of TMB and RTMB who want to implement the sparse no-u-turn sampler [@monnahan2026] to draw samples from a model.
 
 
 This package was originally developed inside of the [adnuts](https://github.com/Cole-Monnahan-NOAA/adnuts)
 package but was split off in late 2025 to have a dedicated package
-for SparseNUTS for TMB and RTMB models.  The `tmbstan` package also provides an
+for SparseNUTS for TMB and RTMB models.  The `tmbstan` package [@monnahan2018] also provides an
 interface to the Stan software, but lacks the ability to
 decorrelate the target distribution prior to sampling.
 `SparseNUTS` provides more flexible options related to the mass
@@ -31,7 +31,7 @@ matrix.
 
 Both TMB and RTMB models can be used with minimal user intervention, including running parallel chains. The `sample_snuts` function will detect which package is used internally and adjust accordingly. If the user wants to use models from both packages in the same session then one needs to be unloaded, e.g., `if('TMB' %in% .packages()) detach(package:TMB)`, before the other package is loaded. 
 
-If the RTMB model uses external functions or data sets then they must be passed through via a list in the `globals` argument so they are available to rebuild the 'obj' in the parallel R sessions. Optionally, the `model_name` can be specified in the call, otherwise your model will be labeled "RTMB" in the output. TMB models do not require a globals input and the model name is pulled from the DLL name, but can be overridden if desired.
+If the RTMB model uses external functions or data sets then they must be passed through via a list in the `globals` argument so they are available to rebuild the 'obj' in the parallel R sessions. Optionally, the `model_name` can be specified in the call, otherwise your model will be labeled "RTMB" in the output. TMB models do not require a `globals` input and the model name is pulled from the DLL name, but can be overridden if desired.
 
 ## Comparison to tmbstan 
 

@@ -4,7 +4,7 @@ Version: 1.0.1.9000
 Authors@R: 
     person("Cole", "Monnahan", , "cole.monnahan@noaa.gov", role = c("aut", "cre"))
 Description: Bayesian inference powered by the sparse no-U-turn (SNUTS) algorithm by 
- Monnahan et al. (in prep). SNUTS is implemented for 'Template Model Builder' ('TMB') models via the 'StanEstimators' interface, which improves sampling efficiency by decorrelating the posterior via a sparse metric prior to sampling. 
+ Monnahan et al. (in review). SNUTS is implemented for 'Template Model Builder' ('TMB') models via the 'StanEstimators' interface, which improves sampling efficiency by decorrelating and decaling the posterior via a sparse metric prior to sampling. 
 URL: https://noaa-afsc.github.io/SparseNUTS
 BugReports: https://github.com/noaa-afsc/SparseNUTS/issues
 License: MIT + file LICENSE
