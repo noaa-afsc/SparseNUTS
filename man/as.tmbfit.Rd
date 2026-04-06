@@ -4,7 +4,7 @@
 \alias{as.tmbfit}
 \title{Construtor for tmbfit objects}
 \usage{
-as.tmbfit(x, parnames, mle, invf, metric, model = "anonymous")
+as.tmbfit(x, parnames, mle, invf, metric, skip_monitor, model = "anonymous")
 }
 \arguments{
 \item{x}{A fitted MCMC object}

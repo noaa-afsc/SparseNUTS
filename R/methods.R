@@ -27,7 +27,8 @@ is.tmbfit <- function(x) inherits(x, "tmbfit")
 #' @param metric The metric used
 #' @param model A character giving the model name
 #' @export
-as.tmbfit <- function(x, parnames, mle, invf, metric, model='anonymous'){
+as.tmbfit <- function(x, parnames, mle, invf, metric,
+                      skip_monitor,  model='anonymous'){
   post <- get_post(x, invf, parnames=parnames, array=TRUE)
   sp <- as.data.frame(x@diagnostics)
   spl <- list()
@@ -46,7 +47,11 @@ as.tmbfit <- function(x, parnames, mle, invf, metric, model='anonymous'){
   # parameters into the original, correlated space
   # mon <- cbind(variable=c(parnames, 'lp__'),
   #              rstan::monitor(post, warmup = warmup, print=FALSE))
-  mon <- posterior::summarise_draws(post[-(1:warmup),,])
+  if(skip_monitor){
+    mon <- NULL
+  } else {
+    mon <- posterior::summarise_draws(post[-(1:warmup),,])
+  }
   x <- list(samples=post, sampler_params=spl, mle=mle,
             monitor=mon, model=model,
             metric=metric,

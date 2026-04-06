@@ -19,6 +19,7 @@ sample_snuts(
   metric = c("auto", "unit", "diag", "dense", "sparse", "stan", "sparse-naive"),
   skip_optimization = FALSE,
   skip_cor = NULL,
+  skip_monitor = FALSE,
   Q = NULL,
   Qinv = NULL,
   globals = NULL,
@@ -102,6 +103,9 @@ dense correlation matrix which is used for downstream
 plotting. For large models this can be very costly. Default
 is NULL which indicates to return it if the dimension is
 less than 1000 only.}
+
+\item{skip_monitor}{Whether to skip monitor calculations (ESS
+and Rhat).}
 
 \item{Q}{The sparse precision matrix. It is calculated
 internally if not specified (default).}

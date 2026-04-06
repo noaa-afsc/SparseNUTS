@@ -60,6 +60,8 @@
 #'   plotting. For large models this can be very costly. Default
 #'   is NULL which indicates to return it if the dimension is
 #'   less than 1000 only.
+#' @param skip_monitor Whether to skip monitor calculations (ESS
+#'   and Rhat).
 #' @param Q The sparse precision matrix. It is calculated
 #'   internally if not specified (default).
 #' @param Qinv The dense matrix \eqn{Q^{-1}}. It is calculated internally
@@ -164,7 +166,8 @@ sample_snuts <-
            metric=c('auto', 'unit', 'diag', 'dense',
                     'sparse', 'stan', 'sparse-naive'),
            skip_optimization=FALSE,
-           skip_cor=NULL, Q=NULL, Qinv=NULL,
+           skip_cor=NULL,
+           skip_monitor=FALSE, Q=NULL, Qinv=NULL,
            globals=NULL, model_name=NULL, refresh=NULL,
            print=TRUE, rotation_only=FALSE,
            lower=NULL, upper=NULL,
@@ -308,7 +311,7 @@ sample_snuts <-
 
     fit2 <- as.tmbfit(fit, parnames=inputs$parnames, mle=inputs$mle,
                       invf=rotation$finv, metric=rotation$metric,
-                      model=model_name)
+                      model=model_name, skip_monitor=skip_monitor)
     fit2$time.Q <- inputs$time.Q; fit2$time.Qinv <- inputs$time.Qinv;
     fit2$time.opt <- inputs$time.opt
     fit2$inits <- yinits
