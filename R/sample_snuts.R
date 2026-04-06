@@ -248,7 +248,7 @@ sample_snuts <-
                                                  inputs=inputs))
     }
     # now can transform the parameter space via the metric selected
-    rotation <- .rotate_posterior(metric=metric, fn=obj2$fn,
+    rotation <- .precondition(metric=metric, fn=obj2$fn,
                                   gr=obj2$gr, inputs,
                                   y.cur=yinits)
     if(rotation_only) return(rotation)

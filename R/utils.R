@@ -1,21 +1,6 @@
 ## NOTE: This file was copied from adnuts on 2025-12-04
 
 
-#' Function to generate random initial values from a previous fit using
-#' SparseNUTS
-#'
-#' @param fit A fitted object from \code{\link{sample_snuts}}
-#' @param chains The number of chains for the subsequent run, which
-#'   determines the number to return.
-#' @return A list of vectors which can be passed back into
-#'   \code{\link{sample_snuts}}.
-#' @export
-sample_inits <- function(fit, chains){
-  post <- extract_samples(fit)
-  ind <- sample(1:nrow(post), size=chains)
-  lapply(ind, function(i) as.numeric(post[i,]))
-}
-
 
 ## Convert SparseNUTS fit (named list) into a \code{shinystan} object.
 ##
@@ -400,37 +385,6 @@ benchmark_metrics <- function(obj, times=1000, metrics=NULL,
     cbind(pct.sparsity=round(100*mean(Q[lower.tri(Q)] == 0),2)) |>
     cbind(npar=length(obj$env$last.par.best))
   res
-}
-
-## Simulate a single draw from either a normal (df=Inf) or t distribution (df<Inf) using the sparse precision Q if available, otherwise the dense covariance.
-## @param inputs A list returned by .get_inits
-mymvnorm <- function(inputs, df=Inf){
-  Q <- inputs$mle[['Q']]
-  Qinv <- inputs$mle$Qinv
-  if(!is.null(Q)){
-    # use efficient precision sampling
-    if(!is(Q, 'dsCMatrix'))
-      stop("This function only works for dsCMatrix objects")
-    L <- Matrix::Cholesky(Q, super=TRUE, LDL=FALSE)
-    u <- matrix(rnorm(ncol(L)), ncol(L))
-    ## NOTE: This code requires LDL=FALSE
-    u <- Matrix::solve(L, u, system="Lt") ## Solve Lt^-1 %*% u
-    u <- Matrix::solve(L, u, system="Pt") ## Multiply Pt %*% u
-    u <- as.numeric(u) # mean-0 white noise with covar=Q^-1
-    if(is.infinite(df)) return(u)
-    # construct t from u via inverse gamma relationship
-    g <- stats::rgamma(n=1, shape=df/2, rate=df/2)
-    u/sqrt(g)
-  } else if(!is.null(Qinv)) {
-    if(is.infinite(df)){
-      u <- mvtnorm::rmvnorm(n=1, sigma=Qinv)
-    } else {
-      u <- mvtnorm::rmvt(n=1, sigma=inputs$Qinv, df=df)
-    }
-    return(as.numeric(u))
-  } else {
-    stop("Neither Q nor Qinv available to simulate")
-  }
 }
 
 #' Extract a single correlation from a sparse precision matrix
