@@ -37,11 +37,11 @@
   : Function to take a character vector of parameter names and force
   them to be unique by appending numbers in square brackets as needed
 
+- [`.precondition()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-precondition.md)
+  : Update algorithm for mass matrix.
+
 - [`.print.mat.stats()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-print.mat.stats.md)
   : Print matrix stats
-
-- [`.rotate_posterior()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-rotate_posterior.md)
-  : Update algorithm for mass matrix.
 
 - [`extract_sampler_params()`](https://noaa-afsc.github.io/SparseNUTS/reference/extract_sampler_params.md)
   : Extract sampler parameters from a fit.
@@ -85,8 +85,7 @@
   : Print summary of tmbfit object
 
 - [`sample_inits()`](https://noaa-afsc.github.io/SparseNUTS/reference/sample_inits.md)
-  : Function to generate random initial values from a previous fit using
-  SparseNUTS
+  : Function to generate random initial values from a previous fit
 
 - [`sample_snuts()`](https://noaa-afsc.github.io/SparseNUTS/reference/sample_snuts.md)
   : NUTS sampling for TMB models using a sparse metric (BETA).

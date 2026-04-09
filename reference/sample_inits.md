@@ -1,7 +1,6 @@
-# Function to generate random initial values from a previous fit using SparseNUTS
+# Function to generate random initial values from a previous fit
 
-Function to generate random initial values from a previous fit using
-SparseNUTS
+Function to generate random initial values from a previous fit
 
 ## Usage
 

@@ -18,8 +18,8 @@
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_Qinv_stats.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-get_inits.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-make_unique_names.html</loc></url>
+<url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-precondition.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-print.mat.stats.html</loc></url>
-<url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/dot-rotate_posterior.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/extract_sampler_params.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/extract_samples.html</loc></url>
 <url><loc>https://noaa-afsc.github.io/SparseNUTS/reference/get_post.html</loc></url>

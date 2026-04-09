@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SparseNUTS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
 Monnahan</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/v1.0.1/vignettes/SparseNUTS.Rmd" class="external-link"><code>vignettes/SparseNUTS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/main/vignettes/SparseNUTS.Rmd" class="external-link"><code>vignettes/SparseNUTS.Rmd</code></a></small>
       <div class="d-none name"><code>SparseNUTS.Rmd</code></div>
     </div>
 
@@ -76,13 +76,14 @@ Monnahan</h4>
     
 <p>The goal of SparseNUTS is to provide a user-friendly workflow for
 users of TMB and RTMB who want to implement the sparse no-u-turn sampler
-<span class="citation">(C. C. Monnahan et al. in prep)</span> to draw
+<span class="citation">(Cole C. Monnahan et al. 2026)</span> to draw
 samples from a model.</p>
 <p>This package was originally developed inside of the <a href="https://github.com/Cole-Monnahan-NOAA/adnuts" class="external-link">adnuts</a> package
 but was split off in late 2025 to have a dedicated package for
 SparseNUTS for TMB and RTMB models. The <code>tmbstan</code> package
-also provides an interface to the Stan software, but lacks the ability
-to decorrelate the target distribution prior to sampling.
+<span class="citation">(C. C. Monnahan and Kristensen 2018)</span> also
+provides an interface to the Stan software, but lacks the ability to
+decorrelate the target distribution prior to sampling.
 <code>SparseNUTS</code> provides more flexible options related to the
 mass matrix.</p>
 <div class="section level2">
@@ -100,8 +101,8 @@ be passed through via a list in the <code>globals</code> argument so
 they are available to rebuild the ‘obj’ in the parallel R sessions.
 Optionally, the <code>model_name</code> can be specified in the call,
 otherwise your model will be labeled “RTMB” in the output. TMB models do
-not require a globals input and the model name is pulled from the DLL
-name, but can be overridden if desired.</p>
+not require a <code>globals</code> input and the model name is pulled
+from the DLL name, but can be overridden if desired.</p>
 </div>
 <div class="section level2">
 <h2 id="comparison-to-tmbstan">Comparison to tmbstan<a class="anchor" aria-label="anchor" href="#comparison-to-tmbstan"></a>
@@ -186,21 +187,21 @@ function as follows:</p>
 <pre><code><span><span class="co">## Starting MCMC sampling...</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Gradient evaluation took 8.7e-05 seconds</span></span>
-<span><span class="co">## 1000 transitions using 10 leapfrog steps per transition would take 0.87 seconds.</span></span>
+<span><span class="co">## Gradient evaluation took 0.000112 seconds</span></span>
+<span><span class="co">## 1000 transitions using 10 leapfrog steps per transition would take 1.12 seconds.</span></span>
 <span><span class="co">## Adjust your expectations accordingly!</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##  Elapsed Time: 0.104 seconds (Warm-up)</span></span>
-<span><span class="co">##                0.56 seconds (Sampling)</span></span>
-<span><span class="co">##                0.664 seconds (Total)</span></span>
+<span><span class="co">##                0.563 seconds (Sampling)</span></span>
+<span><span class="co">##                0.667 seconds (Total)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Model 'schools' has 10 pars, and was fit using NUTS with a 'dense' metric</span></span>
 <span><span class="co">## 1 chain(s) of 1150 total iterations (150 warmup) were used</span></span>
-<span><span class="co">## Average run time per chain was 0.66 seconds </span></span>
+<span><span class="co">## Average run time per chain was 0.67 seconds </span></span>
 <span><span class="co">## Minimum ESS=228 (22.8%), and maximum Rhat=1.008</span></span>
 <span><span class="co">## There were 0 divergences after warmup</span></span></code></pre>
 <p>The returned object <code>fit</code> (an object of ‘adfit’ S3 class)
@@ -288,7 +289,7 @@ can be accessed in more depth via the <code>monitor</code> slot:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Model 'schools' has 10 pars, and was fit using NUTS with a 'dense' metric</span></span>
 <span><span class="co">## 1 chain(s) of 1150 total iterations (150 warmup) were used</span></span>
-<span><span class="co">## Average run time per chain was 0.66 seconds </span></span>
+<span><span class="co">## Average run time per chain was 0.67 seconds </span></span>
 <span><span class="co">## Minimum ESS=228 (22.8%), and maximum Rhat=1.008</span></span>
 <span><span class="co">## There were 0 divergences after warmup</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -396,11 +397,10 @@ Monnahan, C. C, and Kasper Kristensen. 2018. <span>“No-u-Turn Sampling
 for Fast Bayesian Inference in ADMB and TMB: Introducing the Adnuts and
 Tmbstan r Packages.”</span> <em>PloS One</em> 13 (5).
 </div>
-<div id="ref-monnahan2025" class="csl-entry">
-Monnahan, C. C., Thorson J. T., K. Kristensen, and B. Carpenter. in
-prep. <span>“Leveraging Sparsity to Improve No-u-Turn Sampling
-Efficiency for Hierarchical Bayesian Models.”</span> <em>arXiv
-Preprint</em>, in prep.
+<div id="ref-monnahan2026" class="csl-entry">
+Monnahan, Cole C., Kasper Kristensen, James T. Thorson, and Bob
+Carpenter. 2026. <span>“Leveraging Sparsity to Improve No-u-Turn
+Sampling Efficiency for Hierarchical Bayesian Models.”</span> <a href="https://arxiv.org/abs/2603.02437" class="external-link">https://arxiv.org/abs/2603.02437</a>.
 </div>
 </div>
 </div>

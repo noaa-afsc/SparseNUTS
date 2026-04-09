@@ -12,8 +12,8 @@
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Sparse No-U-Turn MCMC Sampling for Template Model Builder">
-<meta name="description" content="Bayesian inference powered by the sparse no-U-turn (SNUTS) algorithm by Monnahan et al. (in prep). SNUTS is implemented for Template Model Builder (TMB) models via the StanEstimators interface, which improves sampling efficiency by decorrelating the posterior via a sparse metric prior to sampling.">
-<meta property="og:description" content="Bayesian inference powered by the sparse no-U-turn (SNUTS) algorithm by Monnahan et al. (in prep). SNUTS is implemented for Template Model Builder (TMB) models via the StanEstimators interface, which improves sampling efficiency by decorrelating the posterior via a sparse metric prior to sampling.">
+<meta name="description" content="Bayesian inference powered by the sparse no-U-turn (SNUTS) algorithm by Monnahan et al. (in review). SNUTS is implemented for Template Model Builder (TMB) models via the StanEstimators interface, which improves sampling efficiency by decorrelating and decaling the posterior via a sparse metric prior to sampling.">
+<meta property="og:description" content="Bayesian inference powered by the sparse no-U-turn (SNUTS) algorithm by Monnahan et al. (in review). SNUTS is implemented for Template Model Builder (TMB) models via the StanEstimators interface, which improves sampling efficiency by decorrelating and decaling the posterior via a sparse metric prior to sampling.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">SparseNUTS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 <p>The goal of SparseNUTS is to provide an interface for performing Bayesian analyses using the no-U-turn (NUTS) MCMC algorithm for TMB and RTMB models.</p>
-<p>SparseNUTS uses the NUTS algorithm in the Stan software as linked through the <a href="https://github.com/andrjohns/StanEstimators" class="external-link">StanEstimators</a> R package. SparseNUTS implements the sparse NUTS (SNUTS) algorithm of Monnahan et al. (in prep) by decorrelating and descaling the posterior distribution prior to passing to Stan. For models with high correlations and sparse precision matrices, SNUTS can substantially improve sampling efficiency and thus reduce run times. It also allows easy comparisons between posterior samples and asymptotic estimates (via the Laplace approximation) of variances and correlations for parameters and derived quantities.</p>
+<p>SparseNUTS uses the NUTS algorithm in the Stan software as linked through the <a href="https://github.com/andrjohns/StanEstimators" class="external-link">StanEstimators</a> R package. SparseNUTS implements the sparse NUTS (SNUTS) algorithm of Monnahan et al. (2026) by decorrelating and descaling the posterior distribution prior to passing to Stan. For models with high correlations and sparse precision matrices, SNUTS can substantially improve sampling efficiency and thus reduce run times. It also allows easy comparisons between posterior samples and asymptotic estimates (via the Laplace approximation) of variances and correlations for parameters and derived quantities.</p>
 <p>Importantly, it works smiliarly for TMB and RTMB models, and can be run on models from existing packages built on either of these platforms (e.g., glmmTMB).</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -99,7 +99,7 @@
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Monnahan, C.C., Kristensen, K., Thorson, J.T., Carpenter, B. Leveraging sparsity to improve no-U-turn sampling for Bayesian hierarchical models. In prep.</p>
+<p>Monnahan, C. C., Kristensen, K., Thorson, J. T., &amp; Carpenter, B. (2026). Leveraging Sparsity to Improve No-U-Turn Sampling Efficiency for Hierarchical Bayesian Models. arXiv preprint arXiv:2603.02437.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

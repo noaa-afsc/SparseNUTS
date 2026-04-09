@@ -1,16 +1,17 @@
 # Introduction to SparseNUTS
 
 The goal of SparseNUTS is to provide a user-friendly workflow for users
-of TMB and RTMB who want to implement the sparse no-u-turn sampler (C.
-C. Monnahan et al. in prep) to draw samples from a model.
+of TMB and RTMB who want to implement the sparse no-u-turn sampler (Cole
+C. Monnahan et al. 2026) to draw samples from a model.
 
 This package was originally developed inside of the
 [adnuts](https://github.com/Cole-Monnahan-NOAA/adnuts) package but was
 split off in late 2025 to have a dedicated package for SparseNUTS for
-TMB and RTMB models. The `tmbstan` package also provides an interface to
-the Stan software, but lacks the ability to decorrelate the target
-distribution prior to sampling. `SparseNUTS` provides more flexible
-options related to the mass matrix.
+TMB and RTMB models. The `tmbstan` package (C. C. Monnahan and
+Kristensen 2018) also provides an interface to the Stan software, but
+lacks the ability to decorrelate the target distribution prior to
+sampling. `SparseNUTS` provides more flexible options related to the
+mass matrix.
 
 ## Differences in usage between TMB and RTMB
 
@@ -26,7 +27,7 @@ If the RTMB model uses external functions or data sets then they must be
 passed through via a list in the `globals` argument so they are
 available to rebuild the ‘obj’ in the parallel R sessions. Optionally,
 the `model_name` can be specified in the call, otherwise your model will
-be labeled “RTMB” in the output. TMB models do not require a globals
+be labeled “RTMB” in the output. TMB models do not require a `globals`
 input and the model name is pulled from the DLL name, but can be
 overridden if desired.
 
@@ -121,21 +122,21 @@ fit <- sample_snuts(obj, refresh=0, seed=1,
 
     ## 
     ## 
-    ## Gradient evaluation took 8.7e-05 seconds
-    ## 1000 transitions using 10 leapfrog steps per transition would take 0.87 seconds.
+    ## Gradient evaluation took 0.000112 seconds
+    ## 1000 transitions using 10 leapfrog steps per transition would take 1.12 seconds.
     ## Adjust your expectations accordingly!
     ## 
     ## 
     ## 
     ##  Elapsed Time: 0.104 seconds (Warm-up)
-    ##                0.56 seconds (Sampling)
-    ##                0.664 seconds (Total)
+    ##                0.563 seconds (Sampling)
+    ##                0.667 seconds (Total)
     ## 
     ## 
     ## 
     ## Model 'schools' has 10 pars, and was fit using NUTS with a 'dense' metric
     ## 1 chain(s) of 1150 total iterations (150 warmup) were used
-    ## Average run time per chain was 0.66 seconds 
+    ## Average run time per chain was 0.67 seconds 
     ## Minimum ESS=228 (22.8%), and maximum Rhat=1.008
     ## There were 0 divergences after warmup
 
@@ -226,7 +227,7 @@ print(fit)
 
     ## Model 'schools' has 10 pars, and was fit using NUTS with a 'dense' metric
     ## 1 chain(s) of 1150 total iterations (150 warmup) were used
-    ## Average run time per chain was 0.66 seconds 
+    ## Average run time per chain was 0.67 seconds 
     ## Minimum ESS=228 (22.8%), and maximum Rhat=1.008
     ## There were 0 divergences after warmup
 
@@ -350,6 +351,7 @@ Monnahan, C. C, and Kasper Kristensen. 2018. “No-u-Turn Sampling for
 Fast Bayesian Inference in ADMB and TMB: Introducing the Adnuts and
 Tmbstan r Packages.” *PloS One* 13 (5).
 
-Monnahan, C. C., Thorson J. T., K. Kristensen, and B. Carpenter. in
-prep. “Leveraging Sparsity to Improve No-u-Turn Sampling Efficiency for
-Hierarchical Bayesian Models.” *arXiv Preprint*, in prep.
+Monnahan, Cole C., Kasper Kristensen, James T. Thorson, and Bob
+Carpenter. 2026. “Leveraging Sparsity to Improve No-u-Turn Sampling
+Efficiency for Hierarchical Bayesian Models.”
+<https://arxiv.org/abs/2603.02437>.

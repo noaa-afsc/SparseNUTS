@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SparseNUTS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>NUTS sampling for TMB models using a sparse metric (BETA).</h1>
-      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/v1.0.1/R/sample_snuts.R" class="external-link"><code>R/sample_snuts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/noaa-afsc/SparseNUTS/blob/main/R/sample_snuts.R" class="external-link"><code>R/sample_snuts.R</code></a></small>
       <div class="d-none name"><code>sample_snuts.Rd</code></div>
     </div>
 
@@ -60,6 +60,7 @@
 <span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"auto"</span>, <span class="st">"unit"</span>, <span class="st">"diag"</span>, <span class="st">"dense"</span>, <span class="st">"sparse"</span>, <span class="st">"stan"</span>, <span class="st">"sparse-naive"</span><span class="op">)</span>,</span>
 <span>  skip_optimization <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  skip_cor <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  skip_monitor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  Q <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  Qinv <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  globals <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -174,6 +175,11 @@ dense correlation matrix which is used for downstream
 plotting. For large models this can be very costly. Default
 is NULL which indicates to return it if the dimension is
 less than 1000 only.</p></dd>
+
+
+<dt id="arg-skip-monitor">skip_monitor<a class="anchor" aria-label="anchor" href="#arg-skip-monitor"></a></dt>
+<dd><p>Whether to skip monitor calculations (ESS
+and Rhat).</p></dd>
 
 
 <dt id="arg-q">Q<a class="anchor" aria-label="anchor" href="#arg-q"></a></dt>

@@ -5,7 +5,7 @@ Construtor for tmbfit objects
 ## Usage
 
 ``` r
-as.tmbfit(x, parnames, mle, invf, metric, model = "anonymous")
+as.tmbfit(x, parnames, mle, invf, metric, skip_monitor, model = "anonymous")
 ```
 
 ## Arguments

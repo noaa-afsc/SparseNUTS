@@ -8,7 +8,7 @@ SparseNUTS uses the NUTS algorithm in the Stan software as linked
 through the
 [StanEstimators](https://github.com/andrjohns/StanEstimators) R package.
 SparseNUTS implements the sparse NUTS (SNUTS) algorithm of Monnahan et
-al. (in prep) by decorrelating and descaling the posterior distribution
+al. (2026) by decorrelating and descaling the posterior distribution
 prior to passing to Stan. For models with high correlations and sparse
 precision matrices, SNUTS can substantially improve sampling efficiency
 and thus reduce run times. It also allows easy comparisons between
@@ -77,9 +77,9 @@ commercial product or activity by DOC or the United States Government.
 
 ## References
 
-Monnahan, C.C., Kristensen, K., Thorson, J.T., Carpenter, B. Leveraging
-sparsity to improve no-U-turn sampling for Bayesian hierarchical models.
-In prep.
+Monnahan, C. C., Kristensen, K., Thorson, J. T., & Carpenter, B. (2026).
+Leveraging Sparsity to Improve No-U-Turn Sampling Efficiency for
+Hierarchical Bayesian Models. arXiv preprint arXiv:2603.02437.
 
 # Package index
 
@@ -120,11 +120,11 @@ In prep.
   : Function to take a character vector of parameter names and force
   them to be unique by appending numbers in square brackets as needed
 
+- [`.precondition()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-precondition.md)
+  : Update algorithm for mass matrix.
+
 - [`.print.mat.stats()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-print.mat.stats.md)
   : Print matrix stats
-
-- [`.rotate_posterior()`](https://noaa-afsc.github.io/SparseNUTS/reference/dot-rotate_posterior.md)
-  : Update algorithm for mass matrix.
 
 - [`extract_sampler_params()`](https://noaa-afsc.github.io/SparseNUTS/reference/extract_sampler_params.md)
   : Extract sampler parameters from a fit.
@@ -168,8 +168,7 @@ In prep.
   : Print summary of tmbfit object
 
 - [`sample_inits()`](https://noaa-afsc.github.io/SparseNUTS/reference/sample_inits.md)
-  : Function to generate random initial values from a previous fit using
-  SparseNUTS
+  : Function to generate random initial values from a previous fit
 
 - [`sample_snuts()`](https://noaa-afsc.github.io/SparseNUTS/reference/sample_snuts.md)
   : NUTS sampling for TMB models using a sparse metric (BETA).
