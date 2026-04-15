@@ -70,15 +70,8 @@ mymvnorm <- function(inputs, df=Inf){
   Q <- inputs$mle[['Q']]
   Qinv <- inputs$mle$Qinv
   if(!is.null(Q)){
-    # use efficient precision sampling
-    if(!is(Q, 'dsCMatrix'))
-      stop("This function only works for dsCMatrix objects")
-    L <- Matrix::Cholesky(Q, super=TRUE, LDL=FALSE)
-    u <- matrix(rnorm(ncol(L)), ncol(L))
-    ## NOTE: This code requires LDL=FALSE
-    u <- Matrix::solve(L, u, system="Lt") ## Solve Lt^-1 %*% u
-    u <- Matrix::solve(L, u, system="Pt") ## Multiply Pt %*% u
-    u <- as.numeric(u) # mean-0 white noise with covar=Q^-1
+    u <- rmvnorm_Q(Q, nsim=1)
+    u <- as.numeric(u)
     if(is.infinite(df)) return(u)
     # construct t from u via inverse gamma relationship
     g <- stats::rgamma(n=1, shape=df/2, rate=df/2)
@@ -92,5 +85,45 @@ mymvnorm <- function(inputs, df=Inf){
     return(as.numeric(u))
   } else {
     stop("Neither Q nor Qinv available to simulate")
+  }
+}
+
+#' Simulate draws from a MVN using the precision matrix Q
+#' @param Q A sparse precision matrix
+#' @param nsim How many replicates to simulate
+rmvnorm_Q <- function(Q, nsim){
+  if(!is(Q, 'dsCMatrix'))
+    stop("This function only works for dsCMatrix objects")
+  L <- Matrix::Cholesky(Q, super=TRUE, LDL=FALSE)
+  u <- matrix(rnorm(nsim*ncol(L)), ncol(L))
+  u <- Matrix::solve(L, u, system="Lt") ## Solve Lt^-1 %*% u
+  u <- Matrix::solve(L, u, system="Pt") ## Multiply Pt %*% u
+  u <- as.matrix(u) # mean-0 white noise with covar=Q^-1
+  return(u)
+}
+
+#' Generate approximate posterior samples from the sparse
+#' precision matrix Q, assuming multivariate normality.
+#'
+#' @param fit An object returned by \code{sample_snuts}
+#' @param nsim The number of samples to draw, defaulting to 4000.
+#' @return A data.frame of approximate samples
+#' @examples
+#' fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
+#' x <- sample_Q(fit)
+sample_Q <- function(fit, nsamples=4000, seed=NULL){
+  if(!is.null(seed)) set.seed(seed)
+  Q <- fit$mle[['Q']]
+  if(is.null(Q)){
+    if(!is.null(fit$mle$Qinv)){
+      out <- as.data.frame(mvtnorm::rmvnorm(n=nsamples, mean= fit$mle$est, sigma=fit$mle$Qinv))
+    } else {
+      stop("The fitted object does not contain Q or Qinv. Try rerunning with optimization turned on or specify Q directly.")
+    }
+  } else {
+    if(is.null(fit$mle$est)) stop("No conditional mean found in fit$mle$est so cannot sample")
+    out <- rmvnorm_Q(fit$mle$Q, nsim = nsamples)
+    out <- as.data.frame(t(out + fit$mle$est))
+    return(out)
   }
 }
