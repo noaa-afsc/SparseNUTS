@@ -42,6 +42,9 @@ plot_uncertainties <- function(fit, log=TRUE, plot=TRUE){
 #'   \code{\link{sample_snuts}}.
 #' @param pars A numeric or character vector of parameters which
 #'   to plot, for plotting a subset of the total (defaults to all)
+#' @param order A string specifying the order to consider the
+#'   parameters in. See \code{?pairs.tmbfit} for more
+#'   information.
 #' @param mfrow A custom grid size (vector of two) to be called
 #'   as \code{par(mfrow)}, overriding the defaults.
 #' @param add.mle Whether to add marginal normal distributions
@@ -72,8 +75,15 @@ plot_uncertainties <- function(fit, log=TRUE, plot=TRUE){
 #' @examples
 #' fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
 #' plot_marginals(fit, pars=1:2)
+#' plot_marginals(fit)
+#' plot_marginals(fit, pars=1:2)
+#' plot_marginals(fit, pars=c(2,1))
+#' plot_marginals(fit, pars=1:5, order='slow')
+#' plot_marginals(fit, pars=1:2, order='fast')
+#' plot_marginals(fit, pars=1:2, order='mismatch')
 #'
-plot_marginals <- function(fit, pars=NULL, mfrow=NULL,
+plot_marginals <- function(fit, pars=NULL,  order='orig',
+                           mfrow=NULL,
                            add.mle=TRUE, add.monitor=TRUE,
                            breaks=30){
   if(!is.tmbfit(fit)) stop("fit is not a valid object")
@@ -88,10 +98,14 @@ plot_marginals <- function(fit, pars=NULL, mfrow=NULL,
   par.old <- par()
   on.exit(par(mfrow=par.old$mfrow, mar=par.old$mar,
               mgp=par.old$mgp, oma=par.old$oma, tck=par.old$tck))
-  posterior <- extract_samples(fit, inc_lp=FALSE)
+  posterior <- extract_samples(fit, inc_lp=TRUE)
   par.names <- names(posterior)
-  if(is.null(pars)) pars <- par.names
-  if(is.character(pars[1])){
+  if(is.null(pars)) {
+    pars <- par.names
+  }
+  if(order!='orig'){
+    pars <- pairs(fit, pars=pars, order=order, plot=FALSE)
+  } else if(is.character(pars[1])){
     pars.ind <- match(x=pars, table=par.names)
     if(any(is.na(pars.ind))){
       warning("Some par names did not match -- dropped")
@@ -126,7 +140,7 @@ plot_marginals <- function(fit, pars=NULL, mfrow=NULL,
   }
   for(ii in pars){
     par <- par.names[ii]
-    if(!is.null(fit$mle)){
+    if(!is.null(fit$mle) & par!='lp__'){
       mle <- fit$mle$est[ii]
       se <-  fit$mle$se[ii]
       x1 <- seq(qnorm(.001, mle, se), qnorm(.999, mle, se), len=100)
@@ -147,7 +161,7 @@ plot_marginals <- function(fit, pars=NULL, mfrow=NULL,
       tmp <- par("usr"); xy <- c(.85,.88)
       text.x <- tmp[1]+xy[1]*diff(tmp[1:2])
       text.y <- tmp[3]+xy[2]*diff(tmp[3:4])
-      label <- paste0('ESS=', round(mon[ii,'ess_bulk'],2), "\nRhat=", round(mon[ii,'rhat'],3))
+      label <- paste0('ESS=', round(mon[ii,'ess_bulk'],0), "\nRhat=", round(mon[ii,'rhat'],2))
       text(x=text.x, y=text.y, labels=label, cex=.8)
     }
     mtext(paste("",par), line=-1.6, adj=0, cex=.9)

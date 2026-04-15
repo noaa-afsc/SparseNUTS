@@ -1,5 +1,7 @@
 
 ## NOTE: This file was copied over from adnuts on 2025-12-04
+
+
 #' Plot pairwise parameter posteriors and optionally the MLE points and
 #' confidence ellipses.
 #'
@@ -44,10 +46,13 @@
 #' @param unbounded Whether to use the bounded or unbounded
 #'   version of the parameters.  size (ESS) and Rhat values on
 #'   the diagonal.
+#' @param plot Whether to plot (default) the results. If FALSE it will return the parameter names.
 #' @param ... Arguments to be passed to plot call in lower
 #'   triangular panels (scatterplots).
 #' @method pairs tmbfit
-#' @return Produces a plot, and returns nothing.
+#' @return Produces a plot, and returns nothing by default. If
+#'   argument \code{plot} is FALSE then it will return a named
+#'   character vector which would have been plotted.
 #' @details This function is modified from the base \code{pairs}
 #'   code to work specifically with fits from the \code{\link{sample_snuts}}
 #'   function using the SNUTS algorithms. If an
@@ -77,7 +82,7 @@ pairs.tmbfit <- function(x,
                          acf.ylim=c(-1,1), ymult=NULL, axis.col=gray(.5),
                          label.cex=.8, limits=NULL,
                          add.mle=TRUE, add.monitor=TRUE, add.inits=FALSE,
-                         point.col=NULL, point.pch=NULL,
+                         point.col=NULL, point.pch=NULL, plot=TRUE,
                          unbounded=FALSE, ...){
   fit <- x
   if(unbounded | !add.mle){
@@ -148,7 +153,6 @@ pairs.tmbfit <- function(x,
   # everything below here matches by par name so this is the only
   # reordering needed
   par.names <- par.names[ind]
-
   ## if(!(NCOL(posterior) %in% c(mle$nopar, mle$nopar+1)))
   ##   stop("Number of parameters in posterior and mle not the same")
   ## pars will either be NULL, so use all parameters. OR a vector of
@@ -172,6 +176,7 @@ pairs.tmbfit <- function(x,
   ## Converts character to index which is used throughout to
   ## subset when looping
   pars.ind <- match(x=pars, table=names(posterior))
+  if(!plot) return(pars.ind)
   n <- length(pars.ind)
   n.mle <- ifelse(is.null(mle$est), 0, length(mle$est))
   if(n==1) stop("This function is only meaningful for >1 parameter")

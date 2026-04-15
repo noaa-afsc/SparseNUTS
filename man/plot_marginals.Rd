@@ -7,6 +7,7 @@
 plot_marginals(
   fit,
   pars = NULL,
+  order = "orig",
   mfrow = NULL,
   add.mle = TRUE,
   add.monitor = TRUE,
@@ -19,6 +20,10 @@ plot_marginals(
 
 \item{pars}{A numeric or character vector of parameters which
 to plot, for plotting a subset of the total (defaults to all)}
+
+\item{order}{A string specifying the order to consider the
+parameters in. See \code{?pairs.tmbfit} for more
+information.}
 
 \item{mfrow}{A custom grid size (vector of two) to be called
 as \code{par(mfrow)}, overriding the defaults.}
@@ -57,5 +62,11 @@ produces a nice readable file.
 \examples{
 fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
 plot_marginals(fit, pars=1:2)
+plot_marginals(fit)
+plot_marginals(fit, pars=1:2)
+plot_marginals(fit, pars=c(2,1))
+plot_marginals(fit, pars=1:5, order='slow')
+plot_marginals(fit, pars=1:2, order='fast')
+plot_marginals(fit, pars=1:2, order='mismatch')
 
 }
