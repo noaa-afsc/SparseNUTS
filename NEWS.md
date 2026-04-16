@@ -1,3 +1,5 @@
+# SparseNUTS 1.0.2.9000 (development version)
+
 
 # SparseNUTS 1.0.2 
 - Changed default `init` option in `sample_snuts` to use 'auto' by default
