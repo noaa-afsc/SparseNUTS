@@ -17,21 +17,23 @@
 #'   best metric (see details), otherwise one of "sparse",
 #'   "dense", "diag", "unit", "Stan", or "sparse-naive" can be
 #'   specified.
-#' @param init Either 'last.par.best' (default), 'random',
-#'   'random-t', 'unif', or a list of vectors equal to the number of chains used.
-#'   The former starts from the joint
-#'   mode, while 'random' and 'random-t' draw from multivariate
-#'   normal or multivariate t with 2 degrees of freedom
-#'   distributions using the inverse joint precision matrix as a
-#'   covariance matrix. 'random-t' is provided to allow for more
-#'   dispersed initial values. 'unif' will draw U(-2,2) samples
-#'   for all parameters, similar to Stan's default behavior. If
-#'   the joint NLL is undefined at the initial values then the
-#'   model will exit and return the initial vector for further
-#'   investigation by the user, if desired. If a seed is
-#'   specified it will be set and thus the inits used will be
-#'   reproducible. The inits are also returned in the 'inits'
-#'   slot of the fitted object.
+#' @param init A character or list specifying the way to initialize SNUTS chains. Options include:
+#' \itemize{
+#'   \item \code{'auto'} (default): Uses 'random-t' if \eqn{Q} or \eqn{Q^{-1}} are available, else reverts to 'last.par.best'}
+#'   \item \code{'last.par.best'}: Uses the best parameters from a previous state from \code{obj$env$last.par.best}.
+#'   \item \code{'random'}: Draws from a multivariate normal distribution using the
+#'   inverse joint precision matrix as a covariance matrix.
+#'   \item \code{'random-t'}: Draws from a multivariate t-distribution with 2 degrees
+#'   of freedom. Provided to allow for more dispersed initial values.
+#'   \item \code{'unif'}: Draws \eqn{U(-2, 2)} samples for all parameters,
+#'   similar to Stan's default behavior.
+#'   \item \code{list}: A list of vectors equal to the number of chains used.
+#' }
+#'
+#' If the joint NLL is undefined at the initial values, the model will exit and
+#' return the initial vector for further investigation. If a seed is specified,
+#' the initialization is reproducible. Initial values are returned in the
+#' \code{'inits'} slot of the fitted object.
 #' @param chains Number of chains
 #' @param cores Number of parallel cores to use, defaults to
 #'   \code{chains} so set this to 1 to execute serial chains.
@@ -162,7 +164,7 @@ sample_snuts <-
            chains=4, cores=chains, thin=1,
            adapt_stan_metric=NULL,
            control=NULL, seed=NULL, laplace=FALSE,
-           init=c('last.par.best', 'random', 'random-t', 'unif'),
+           init=c('auto', 'last.par.best', 'random', 'random-t', 'unif'),
            metric=c('auto', 'unit', 'diag', 'dense',
                     'sparse', 'stan', 'sparse-naive'),
            skip_optimization=FALSE,

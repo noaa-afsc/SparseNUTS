@@ -12,7 +12,7 @@ test_that("all metrics work", {
                 sample_snuts(obj, num_samples=850,
                              num_warmup=150,
                              skip_optimization=TRUE,
-                             Q=Q, Qinv=M,
+                             Q=Q, Qinv=M, init='last.par.best',
                              refresh=0,
                              cores=1, chains=1, seed=1,
                              metric=m, print=FALSE)))
@@ -48,7 +48,7 @@ test_that("parallel works", {
   obj <- get_rtmb_obj()
   fit <- sample_snuts(obj, num_samples=800, num_warmup=200, cores=4,
                            refresh=0, print=FALSE, adapt_stan_metric = TRUE,
-                           chains=4, seed=1, metric='sparse')
+                           chains=4, seed=1, metric='sparse', init='last.par.best')
   expect_equal(sum(tail(as.data.frame(fit),1)),  -1.116007, tolerance = 1e-5)
 })
 
@@ -57,8 +57,9 @@ test_that("thinning works", {
   skip_if(skip_TMB)
   obj <- get_rtmb_obj()
   fit <- sample_snuts(obj, num_samples=800, num_warmup=200, cores=1,
-                           chains=1, seed=1, metric='sparse',
-                           thin=2,refresh=0, print=FALSE)
+                      chains=1, seed=1, metric='sparse',
+                      init='last.par.best',
+                      thin=2,refresh=0, print=FALSE)
   expect_equal(400,nrow(as.data.frame(fit)))
   #fit <- sample_snuts(obj, num_samples=800, num_warmup=200, cores=4,
    #                        chains=4, seed=1, metric='sparse',
@@ -245,13 +246,13 @@ test_that("auto metric selection is robust to model type", {
   ## normal case of RE, with and without laplace
   suppressWarnings(fit1 <- sample_snuts(obj, num_samples=800, refresh=0,
                                         num_warmup=200, cores=1, chains=1, seed=1,
-                                        adapt_stan_metric = TRUE,
+                                        adapt_stan_metric = TRUE, init='last.par.best',
                                         metric='auto', print=FALSE))
   expect_equal('sparse',fit1$metric)
   expect_equal(as.numeric(tail(as.data.frame(fit1),1)[1]),-1.362834, tolerance =1e-6)
   suppressWarnings(fit2 <- sample_snuts(obj, num_samples=800,  laplace=TRUE, refresh=0,
                                         num_warmup=200, cores=1, chains=1, seed=1,
-                                        adapt_stan_metric = TRUE,
+                                        adapt_stan_metric = TRUE, init='last.par.best',
                                         metric='auto', print=FALSE))
   expect_equal('dense', fit2$metric)
   expect_equal(as.numeric(tail(as.data.frame(fit2),1)[1]), 51.96083, tolerance =1e-6)
@@ -285,7 +286,7 @@ test_that("auto metric selection is robust to model type", {
                regexp = 'No random effects found')
   suppressWarnings(fit5 <- sample_snuts(obj2, num_samples=800, refresh=0,
                                         num_warmup=200, cores=1, chains=1, seed=1,
-                                        adapt_stan_metric = TRUE,
+                                        adapt_stan_metric = TRUE, init='last.par.best',
                                         metric='auto', print=FALSE))
   expect_equal(fit5$metric, 'dense')
   expect_equal(as.numeric(tail(as.data.frame(fit5),1)[1]),  -1.014615, tolerance =1e-6)

@@ -104,7 +104,7 @@ plot_marginals <- function(fit, pars=NULL,  order='orig',
     pars <- par.names
   }
   if(order!='orig'){
-    pars <- pairs(fit, pars=pars, order=order, plot=FALSE)
+    pars <- pairs.tmbfit(fit, pars=pars, order=order, plot=FALSE)
   } else if(is.character(pars[1])){
     pars.ind <- match(x=pars, table=par.names)
     if(any(is.na(pars.ind))){

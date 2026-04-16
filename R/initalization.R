@@ -7,6 +7,13 @@
 .get_inits <- function(init, obj2, inputs) {
   # only certain combinations of metrics and inputs can work
   metric <- inputs$metric
+  if(init=='auto'){
+    if(!is.null(inputs$mle[['Q']]) | !is.null(inputs$mle[['Qinv']])){
+      init <- 'random-t'
+    } else {
+      init <- 'last.par.best'
+    }
+  }
   if(metric=='stan' & init %in% c('random', 'random-t'))
     stop("'stan' metric not allowed with 'random' or 'random-t' init b/c no Qinv")
   if((is.null(inputs$Qinv | is.null(inputs$mle$est))) &
@@ -80,7 +87,7 @@ mymvnorm <- function(inputs, df=Inf){
     if(is.infinite(df)){
       u <- mvtnorm::rmvnorm(n=1, sigma=Qinv)
     } else {
-      u <- mvtnorm::rmvt(n=1, sigma=inputs$Qinv, df=df)
+      u <- mvtnorm::rmvt(n=1, sigma=Qinv, df=df)
     }
     return(as.numeric(u))
   } else {
@@ -108,6 +115,7 @@ rmvnorm_Q <- function(Q, nsim){
 #' @param fit An object returned by \code{sample_snuts}
 #' @param nsim The number of samples to draw, defaulting to 4000.
 #' @return A data.frame of approximate samples
+#' @export
 #' @examples
 #' fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
 #' x <- sample_Q(fit)
