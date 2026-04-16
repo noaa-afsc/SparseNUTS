@@ -64,6 +64,7 @@
 #'   \code{\link{sample_snuts}}.
 #' @export
 sample_inits <- function(fit, chains){
+  stopifnot(is.tmbfit(fit))
   post <- extract_samples(fit)
   ind <- sample(1:nrow(post), size=chains)
   lapply(ind, function(i) as.numeric(post[i,]))
@@ -113,13 +114,15 @@ rmvnorm_Q <- function(Q, nsim){
 #' precision matrix Q, assuming multivariate normality.
 #'
 #' @param fit An object returned by \code{sample_snuts}
-#' @param nsim The number of samples to draw, defaulting to 4000.
+#' @param nsamples The number of samples to draw, defaulting to 4000.
+#' @param seed An optional random seed
 #' @return A data.frame of approximate samples
 #' @export
 #' @examples
 #' fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
 #' x <- sample_Q(fit)
 sample_Q <- function(fit, nsamples=4000, seed=NULL){
+  stopifnot(is.tmbfit(fit))
   if(!is.null(seed)) set.seed(seed)
   Q <- fit$mle[['Q']]
   if(is.null(Q)){

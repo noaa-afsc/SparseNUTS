@@ -36,10 +36,10 @@ if(!skip_RTMB){
     opt <- with(obj, nlminb(par,fn,gr))
     return(obj)
   }
-#  obj <- get_rtmb_obj()
-#  fit <- sample_snuts(obj, num_samples=400, num_warmup=100,
-#                      chains=2, cores=1, init='random-t',
-#                      seed=121414)
-#  saveRDS(object=fit, file='tests/testthat/fit_snuts.RDS')
+ # obj <- get_rtmb_obj()
+ # fit <- sample_snuts(obj, num_samples=400, num_warmup=100,
+ #                     chains=2, cores=1, init='random-t',
+ #                     seed=121414)
+ # saveRDS(object=fit, file='tests/testthat/fit.RDS')
 
 }

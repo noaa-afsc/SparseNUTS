@@ -16,14 +16,14 @@
 #'   Defaults to "auto" which uses an algorithm to select the
 #'   best metric (see details), otherwise one of "sparse",
 #'   "dense", "diag", "unit", "Stan", or "sparse-naive" can be
-#'   specified.
+#'   specified. See details for more information.
 #' @param init A character or list specifying the way to initialize SNUTS chains. Options include:
 #' \itemize{
-#'   \item \code{'auto'} (default): Uses 'random-t' if \eqn{Q} or \eqn{Q^{-1}} are available, else reverts to 'last.par.best'}
+#'   \item \code{'auto'} (default): Uses 'random-t' if \eqn{Q} or \eqn{Q^{-1}} are available, else reverts to 'last.par.best'.
 #'   \item \code{'last.par.best'}: Uses the best parameters from a previous state from \code{obj$env$last.par.best}.
-#'   \item \code{'random'}: Draws from a multivariate normal distribution using the
+#'   \item \code{'random'}: Draws from a multivariate normal distribution centered at the conditional mode and using the
 #'   inverse joint precision matrix as a covariance matrix.
-#'   \item \code{'random-t'}: Draws from a multivariate t-distribution with 2 degrees
+#'   \item \code{'random-t'}: As for 'random' but draws from a multivariate t-distribution with 2 degrees
 #'   of freedom. Provided to allow for more dispersed initial values.
 #'   \item \code{'unif'}: Draws \eqn{U(-2, 2)} samples for all parameters,
 #'   similar to Stan's default behavior.
@@ -314,8 +314,9 @@ sample_snuts <-
     fit2 <- as.tmbfit(fit, parnames=inputs$parnames, mle=inputs$mle,
                       invf=rotation$finv, metric=rotation$metric,
                       model=model_name, skip_monitor=skip_monitor)
-    fit2$time.Q <- inputs$time.Q; fit2$time.Qinv <- inputs$time.Qinv;
-    fit2$time.opt <- inputs$time.opt
+    fit2$timing <- c(fit2$timing, time.Q=inputs$time.Q,
+                   time.Qinv=inputs$time.Qinv,
+                   time.opt=inputs$time.opt)
     fit2$inits <- yinits
     fit2$condition.factor <- inputs$condition.factor
     fit2$opt <- inputs$opt

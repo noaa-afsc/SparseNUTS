@@ -72,11 +72,29 @@ values (if 'random") and for NUTS.}
 and only use NUTS to sample the fixed effects, or turn it
 off and sample from the joint parameter space (default).}
 
+\item{init}{A character or list specifying the way to initialize SNUTS chains. Options include:
+\itemize{
+\item \code{'auto'} (default): Uses 'random-t' if \eqn{Q} or \eqn{Q^{-1}} are available, else reverts to 'last.par.best'.
+\item \code{'last.par.best'}: Uses the best parameters from a previous state from \code{obj$env$last.par.best}.
+\item \code{'random'}: Draws from a multivariate normal distribution centered at the conditional mode and using the
+inverse joint precision matrix as a covariance matrix.
+\item \code{'random-t'}: As for 'random' but draws from a multivariate t-distribution with 2 degrees
+of freedom. Provided to allow for more dispersed initial values.
+\item \code{'unif'}: Draws \eqn{U(-2, 2)} samples for all parameters,
+similar to Stan's default behavior.
+\item \code{list}: A list of vectors equal to the number of chains used.
+}
+
+If the joint NLL is undefined at the initial values, the model will exit and
+return the initial vector for further investigation. If a seed is specified,
+the initialization is reproducible. Initial values are returned in the
+\code{'inits'} slot of the fitted object.}
+
 \item{metric}{A character specifying which metric to use.
 Defaults to "auto" which uses an algorithm to select the
 best metric (see details), otherwise one of "sparse",
 "dense", "diag", "unit", "Stan", or "sparse-naive" can be
-specified.}
+specified. See details for more information.}
 
 \item{skip_optimization}{Whether to skip optimization or not
 (default). If the model is already optimized and Q available

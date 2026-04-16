@@ -25,6 +25,7 @@ is.tmbfit <- function(x) inherits(x, "tmbfit")
 #' @param mle A list of MLE parameters
 #' @param invf The inverse function for the parameters
 #' @param metric The metric used
+#' @param skip_monitor Whether to skip monitor calculations
 #' @param model A character giving the model name
 #' @export
 as.tmbfit <- function(x, parnames, mle, invf, metric,
@@ -36,6 +37,8 @@ as.tmbfit <- function(x, parnames, mle, invf, metric,
     spl[[chain]] <- as.matrix(sp[sp$.chain==chain,1:6])
   }
   timing <- sapply(x@timing, function(x) unlist(x))
+  timing <- list(time.warmup=timing[1,],time.sampling=timing[2,],
+                 time.total=timing[1,]+timing[2,])
   thin <- as.numeric(x@metadata$thin)
   warmup <- ceiling(as.numeric(x@metadata$num_warmup)/thin)
   iter <- ceiling(as.numeric(x@metadata$num_samples)/thin)
@@ -58,11 +61,8 @@ as.tmbfit <- function(x, parnames, mle, invf, metric,
             par_names=parnames,
             max_treedepth=x@metadata$max_depth,
             warmup=warmup, iter=iter, thin=thin,
-            time.warmup=timing[1,],
-            time.sampling=timing[2,],
-            time.total=timing[1,]+timing[2,],
-            ## iter=as.numeric(x@metadata$num_samples)+as.numeric(x@metadata$num_warmup),
-            algorithm='NUTS')
+            timing=timing,
+            algorithm='SNUTS')
   tmbfit(x)
 }
 
@@ -114,35 +114,38 @@ print.tmbfit <- function(x, ...){
   pars <- dim(x$samples)[3]-1
   samples <- (iter-x$warmup)*chains
   cat(paste0("Model '", x$model,"'", " has ", pars,
-             " pars, and was fit using ", x$algorithm,
+             " pars and was fit using ", x$algorithm,
              " with a '", x$metric, "' metric\n"))
   cat(paste0(chains," chain(s) of ", iter, " total iterations (", x$warmup, " warmup) were used\n"))
-  rt <- sum(x$time.total)/chains
+  rt <- c(sum(x$timing$time.total)/chains,  max(x$timing$time.total))
   ru <- 'seconds'
-  if(rt>60*60*24) {
+  if(rt[2]>60*60*24) {
     rt <- rt/(60*60*24); ru <- 'days'
-  } else if(rt>60*60) {
+  } else if(rt[2]>60*60) {
     rt <- rt/(60*60); ru <- 'hours'
-  } else if(rt>60){
+  } else if(rt[2]>60){
     rt <- rt/60; ru <- 'minutes'
   }
-  cat("Average run time per chain was", round(rt,2),  ru, '\n')
+  cat("Run time per chain: average=", round(rt[1],2), "and max=", round(rt[2],2), ru, '\n')
   if(!is.null(x$monitor)){
     minESS <- round(min(x$monitor$ess_bulk),1)
     maxRhat <- round(max(x$monitor$rhat),3)
     if(is.finite(minESS) & is.finite(maxRhat)){
-      cat(paste0("Minimum ESS=",
+      cat(paste0("Min bulk ESS=",
                  minESS,
                  " (",
                  round(100*minESS/samples,2),
-                 "%), and maximum Rhat=", maxRhat, '\n'))
+                 "%) [", x$monitor$variable[which.min(x$monitor$ess_bulk)],
+                 "] and maximum Rhat=", maxRhat, " [",
+                 x$monitor$variable[which.max(x$monitor$rhat)],
+                 ']\n'))
       if(minESS<200 | maxRhat > 1.1)
         cat('!! Warning: Signs of non-convergence found. Do not use for inference !!\n')
     } else {
       warning("ESS and Rhat calculations are not finite. Check model and rerun")
     }
   }
-  if(x$algorithm=='NUTS'){
+  if(x$algorithm=='SNUTS'){
     ndivs <- sum(extract_sampler_params(x)[,'divergent__'])
     cat(paste0("There were ", ndivs, " divergences after warmup\n"))
   }

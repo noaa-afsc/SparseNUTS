@@ -185,6 +185,7 @@ plot_marginals <- function(fit, pars=NULL,  order='orig',
 #' fit <- readRDS(system.file('examples', 'fit.RDS', package='SparseNUTS'))
 #' plot_sampler_params(fit)
 plot_sampler_params <- function(fit, plot=TRUE){
+  stopifnot(is.tmbfit(fit))
   if(!requireNamespace("ggplot2", quietly=TRUE))
     stop("ggplot2 package not found")
   sp <- SparseNUTS::extract_sampler_params(fit, inc_warmup=TRUE)
@@ -220,6 +221,7 @@ plot_sampler_params <- function(fit, plot=TRUE){
 #' @return A plot created by \code{\link[Matrix]{image}}.
 #' @export
 plot_Q <- function(fit, Q=NULL){
+  stopifnot(is.tmbfit(fit))
   if(is.null(Q)){
     if(!is.tmbfit(fit)) stop("fit is not a valid fitted object")
     if(is.null(fit$mle$Q)) return(NULL)

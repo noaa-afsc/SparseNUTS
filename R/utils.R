@@ -16,6 +16,7 @@
 ## @return An S4 object of class shinystan. Depending on the algorithm
 ##   used, this list will have slight differences.
 .as.shinytmb <- function(fit){
+  stopifnot(is.tmbfit(fit))
   if(fit$algorithm=="NUTS"){
     sso <- with(fit, shinystan::as.shinystan(samples, warmup=warmup, max_treedepth=max_treedepth,
              sampler_params=sampler_params, algorithm='NUTS', model_name=model))

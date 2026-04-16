@@ -17,6 +17,8 @@ as.tmbfit(x, parnames, mle, invf, metric, skip_monitor, model = "anonymous")
 
 \item{metric}{The metric used}
 
+\item{skip_monitor}{Whether to skip monitor calculations}
+
 \item{model}{A character giving the model name}
 }
 \description{

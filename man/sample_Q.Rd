@@ -10,7 +10,9 @@ sample_Q(fit, nsamples = 4000, seed = NULL)
 \arguments{
 \item{fit}{An object returned by \code{sample_snuts}}
 
-\item{nsim}{The number of samples to draw, defaulting to 4000.}
+\item{nsamples}{The number of samples to draw, defaulting to 4000.}
+
+\item{seed}{An optional random seed}
 }
 \value{
 A data.frame of approximate samples
