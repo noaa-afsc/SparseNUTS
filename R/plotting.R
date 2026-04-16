@@ -221,7 +221,6 @@ plot_sampler_params <- function(fit, plot=TRUE){
 #' @return A plot created by \code{\link[Matrix]{image}}.
 #' @export
 plot_Q <- function(fit, Q=NULL){
-  stopifnot(is.tmbfit(fit))
   if(is.null(Q)){
     if(!is.tmbfit(fit)) stop("fit is not a valid fitted object")
     if(is.null(fit$mle$Q)) return(NULL)
