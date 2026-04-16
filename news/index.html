@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SparseNUTS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,17 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="sparsenuts-development-version">SparseNUTS (development version)<a class="anchor" aria-label="anchor" href="#sparsenuts-development-version"></a></h2>
 </div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.2" id="sparsenuts-102">SparseNUTS 1.0.2<a class="anchor" aria-label="anchor" href="#sparsenuts-102"></a></h2>
+<ul><li>Changed default <code>init</code> option in <code>sample_snuts</code> to use ‘auto’ by default</li>
+<li>Added <code>sample_Q</code> function to efficiently sample approximate posterior draws from the joint precision matrix.</li>
+<li>Added <code>order</code> argument to <code>plot_marginals</code>
+</li>
+<li>Added <code>skip_monitor</code> argument to <code>sample_snuts</code>
+</li>
+<li>Improved console output</li>
+<li>Minor code and documentation improvements</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.1" id="sparsenuts-101">SparseNUTS 1.0.1<a class="anchor" aria-label="anchor" href="#sparsenuts-101"></a></h2>
 <ul><li>Minimized dense matrix calculations throughout to reduce computational overhead of large models. This includes testing for the metric, calculating and returning correlations, sampling from Q or Qinv, etc.</li>

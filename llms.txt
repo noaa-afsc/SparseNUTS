@@ -167,6 +167,13 @@ Hierarchical Bayesian Models. arXiv preprint arXiv:2603.02437.
 - [`print(`*`<tmbfit>`*`)`](https://noaa-afsc.github.io/SparseNUTS/reference/print.tmbfit.md)
   : Print summary of tmbfit object
 
+- [`rmvnorm_Q()`](https://noaa-afsc.github.io/SparseNUTS/reference/rmvnorm_Q.md)
+  : Simulate draws from a MVN using the precision matrix Q
+
+- [`sample_Q()`](https://noaa-afsc.github.io/SparseNUTS/reference/sample_Q.md)
+  : Generate approximate posterior samples from the sparse precision
+  matrix Q, assuming multivariate normality.
+
 - [`sample_inits()`](https://noaa-afsc.github.io/SparseNUTS/reference/sample_inits.md)
   : Function to generate random initial values from a previous fit
 

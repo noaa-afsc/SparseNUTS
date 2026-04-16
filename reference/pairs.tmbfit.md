@@ -23,6 +23,7 @@ pairs(
   add.inits = FALSE,
   point.col = NULL,
   point.pch = NULL,
+  plot = TRUE,
   unbounded = FALSE,
   ...
 )
@@ -106,6 +107,11 @@ pairs(
 
   Shape of posterior points. Defaults to 16 if unspecified.
 
+- plot:
+
+  Whether to plot (default) the results. If FALSE it will return the
+  parameter names.
+
 - unbounded:
 
   Whether to use the bounded or unbounded version of the parameters.
@@ -118,7 +124,9 @@ pairs(
 
 ## Value
 
-Produces a plot, and returns nothing.
+Produces a plot, and returns nothing by default. If argument `plot` is
+FALSE then it will return a named character vector which would have been
+plotted.
 
 ## Details
 

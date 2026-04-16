@@ -30,6 +30,10 @@ as.tmbfit(x, parnames, mle, invf, metric, skip_monitor, model = "anonymous")
 
   The metric used
 
+- skip_monitor:
+
+  Whether to skip monitor calculations
+
 - model:
 
   A character giving the model name

@@ -94,7 +94,7 @@ fit <- sample_snuts(obj, seed=1, chains=1, refresh=0,
 #> Getting Qinv and stats for fixed effects...
 #> Qinv is 100% sparse | Ratio of marginal SDs=5.7 | Max abs cor >=0
 #> diag metric selected b/c low max cor (0)
-#> log-posterior at inits=(-1.42); at conditional mode=-1.416
+#> log-posterior at inits=(-4.42); at conditional mode=-1.416
 #> Starting MCMC sampling...
 ```
 
