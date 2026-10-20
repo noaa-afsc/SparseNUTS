@@ -90,6 +90,9 @@
 #'   metric. Use \code{\link{plot_sampler_params}} to investigate
 #'   warmup performance and adjust as necessary for subsequent
 #'   runs.
+#' @param obj2 A rebuilt TMB object for cases where the internal code to do this
+#'   fails, such as a sequential reduction. If specified, it will not be rebuilt
+#'   internally.
 #' @param ... Additional arguments to pass to
 #'   \code{\link[StanEstimators]{stan_sample}}.
 #' @return A fitted MCMC object of class 'tmbfit'
@@ -174,6 +177,7 @@ sample_snuts <-
            print=TRUE, rotation_only=FALSE,
            lower=NULL, upper=NULL,
            iter=2000, warmup=floor(iter/2),
+           obj2=NULL,
            ...){
 
     if (!requireNamespace("StanEstimators", quietly = TRUE))
@@ -215,25 +219,37 @@ sample_snuts <-
     hasRE <- length(obj$env$random)>0
     if(!isRTMB){
       packages <- c("TMB", "Matrix")
-      obj2 <- obj
-      if(!laplace & hasRE){
-        message("Rebuilding TMB obj without random effects...")
-        obj2 <- TMB::MakeADFun(data=obj$env$data, parameters=obj$env$parList(),
-                               map=obj$env$map,
-                               random=NULL, silent=TRUE,
-                               DLL=obj$env$DLL)
+      if(!is.null(obj2)){
+        if(!laplace & hasRE){
+          message("Rebuilding TMB obj without random effects...")
+          obj2 <- TMB::MakeADFun(data=obj$env$data, parameters=obj$env$parList(),
+                                 map=obj$env$map,
+                                 random=NULL, silent=TRUE,
+                                 DLL=obj$env$DLL)
+        } else {
+          # if no Laplace no need to rebuilt it to get joint model
+          obj2 <- obj
+        }
+      } else {
+        message("Using supplied obj2 input")
       }
     } else {
       packages <- c("RTMB", "Matrix")
-      obj2 <- obj
-      if(!laplace & hasRE){
-        message("Rebuilding RTMB obj without random effects...")
-        obj2 <- RTMB::MakeADFun(func=obj$env$data, parameters=obj$env$parList(),
-                                map=obj$env$map,
-                                random=NULL, silent=TRUE,
-                                DLL=obj$env$DLL)
+      if(is.null(obj2)){
+        if(!laplace & hasRE){
+          message("Rebuilding RTMB obj without random effects...")
+          obj2 <- RTMB::MakeADFun(func=obj$env$data, parameters=obj$env$parList(),
+                                  map=obj$env$map,
+                                  random=NULL, silent=TRUE,
+                                  DLL=obj$env$DLL)
+        } else {
+          obj2 <- obj
+        }
+      } else {
+        message("Using supplied obj2 input")
       }
     }
+
     # reset back to the mode
     if(!is.null(inputs$mle$est)) dummy <- obj2$fn(inputs$mle$est)
     # this is the initial value in the untransformed (original)

@@ -77,5 +77,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Cole Monnahan \email{cole.monnahan@noaa.gov}
 
+Authors:
+\itemize{
+  \item Cole Monnahan \email{cole.monnahan@noaa.gov}
+}
+
 }
 \keyword{internal}

@@ -31,6 +31,7 @@ sample_snuts(
   upper = NULL,
   iter = 2000,
   warmup = floor(iter/2),
+  obj2 = NULL,
   ...
 )
 }
@@ -144,6 +145,10 @@ sparse, or diag metrics a much shorter warmup can be used
 metric. Use \code{\link{plot_sampler_params}} to investigate
 warmup performance and adjust as necessary for subsequent
 runs.}
+
+\item{obj2}{A rebuilt TMB object for cases where the internal code to do this
+fails, such as a sequential reduction. If specified, it will not be rebuilt
+internally.}
 
 \item{...}{Additional arguments to pass to
 \code{\link[StanEstimators]{stan_sample}}.}
