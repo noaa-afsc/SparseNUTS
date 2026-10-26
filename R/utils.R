@@ -17,7 +17,7 @@
 ##   used, this list will have slight differences.
 .as.shinytmb <- function(fit){
   stopifnot(is.tmbfit(fit))
-  if(fit$algorithm=="NUTS"){
+  if(fit$algorithm %in% c('SNUTS', "NUTS")){
     sso <- with(fit, shinystan::as.shinystan(samples, warmup=warmup, max_treedepth=max_treedepth,
              sampler_params=sampler_params, algorithm='NUTS', model_name=model))
   }  else {
